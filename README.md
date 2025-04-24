@@ -1,2 +1,3 @@
-# SpaceBattle
-Space Battle: The Alien Alliance
+# Space Battle: The Alien Alliance
+
+Some explanation...
