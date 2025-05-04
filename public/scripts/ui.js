@@ -174,76 +174,92 @@ const OnlineUsersPanel = (function() {
     return { initialize, update, addUser, removeUser };
 })();
 
-const ChatPanel = (function() {
-	// This stores the chat area
-    let chatArea = null;
-
-    // This function initializes the UI
+const PairingPanel = (function() {
+    // This function initializes the pairing UI
     const initialize = function() {
-		// Set up the chat area
-		chatArea = $("#chat-area");
+        // Hide the pairing panel initially
+        $("#pairing-panel").hide();
 
-        // Submit event for the input form
-        $("#chat-input-form").on("submit", (e) => {
-            // Do not submit the form
-            e.preventDefault();
-
-            // Get the message content
-            const content = $("#chat-input").val().trim();
-
-            // Post it
-            Socket.postMessage(content);
-
-			// Clear the message
-            $("#chat-input").val("");
+        // Handle invite button click
+        $(document).on("click", ".invite-button", function() {
+            const invitedUser = $(this).data("username");
+            Socket.sendInvite(Authentication.getUser(), invitedUser);
         });
 
-        $("#chat-input").on("keydown", () => {
-            Socket.sendTyping();
+        // Handle accept button click
+        $(document).on("click", "#accept-invite", function(inviter) {
+            Socket.acceptInvite(inviter);
+            $("#invite-overlay").hide();
+            startCountdown();
         });
- 	};
 
-    // This function updates the chatroom area
-    const update = function(chatroom) {
-        // Clear the online users area
-        chatArea.empty();
+        // Handle decline button click
+        $(document).on("click", "#decline-invite", function() {
+            Socket.declineInvite();
+            $("#invite-overlay").hide();
+        });
 
-        // Add the chat message one-by-one
-        for (const message of chatroom) {
-			addMessage(message);
+        $(document).on("click", "#decline-notification-ok", function() {
+            $("#decline-notification-overlay").fadeOut(500);
+        });
+    };
+
+    // This function shows the pairing panel
+    const show = function() {
+        $("#pairing-panel").fadeIn(500);
+    };
+
+    // This function hides the pairing panel
+    const hide = function() {
+        $("#pairing-panel").fadeOut(500);
+    };
+
+    // This function updates the online users in the pairing panel
+    const update = function(onlineUsers) {
+        const pairingArea = $("#pairing-area");
+        pairingArea.empty();
+
+        const currentUser = Authentication.getUser();
+        for (const username in onlineUsers) {
+            if (username !== currentUser.username) {
+                pairingArea.append(
+                    $("<div class='user-row row'></div>")
+                        .append(UI.getUserDisplay(onlineUsers[username]))
+                        .append(
+                            $("<button class='invite-button'>Invite</button>")
+                                .data("username", username)
+                        )
+                );
+            }
         }
     };
 
-    // This function adds a new message at the end of the chatroom
-    const addMessage = function(message) {
-		const datetime = new Date(message.datetime);
-		const datetimeString = datetime.toLocaleDateString() + " " +
-							   datetime.toLocaleTimeString();
-
-		chatArea.append(
-			$("<div class='chat-message-panel row'></div>")
-				.append(UI.getUserDisplay(message.user))
-				.append($("<div class='chat-message col'></div>")
-					.append($("<div class='chat-date'>" + datetimeString + "</div>"))
-					.append($("<div class='chat-content'>" + message.content + "</div>"))
-				)
-		);
-		chatArea.scrollTop(chatArea[0].scrollHeight);
+    // This function shows the invite overlay
+    const showInvite = function(inviter) {
+        $("#invite-message").text(`${inviter.name} has invited you to play.`);
+        $("#invite-overlay").fadeIn(500);
     };
 
-    let showTypingTimeout = null;
-    const showTyping = function(user) {
-        $("#typing").text(user.name + " is typing...");
-        
-        if (showTypingTimeout)
-            clearTimeout(showTypingTimeout);
+    // This function starts the countdown before the game
+    const startCountdown = function() {
+        let countdown = 5;
+        $("#countdown").text(countdown);
+        $("#countdown-overlay").fadeIn(500);
 
-        showTypingTimeout = setTimeout(() => {
-            $("#typing").text("");
-        }, 3000);
-    }
+        const interval = setInterval(() => {
+            countdown--;
+            $("#countdown").text(countdown);
 
-    return { initialize, update, addMessage, showTyping };
+            if (countdown <= 0) {
+                clearInterval(interval);
+                $("#countdown-overlay").fadeOut(500);
+                // Transition to the game screen (to be implemented)
+                console.log("Game starts now!");
+            }
+        }, 1000);
+    };
+
+    return { initialize, show, hide, update, showInvite };
 })();
 
 const UI = (function() {

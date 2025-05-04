@@ -153,11 +153,6 @@ app.get("/signout", (req, res) => {
     // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
-
-//
-// ***** Please insert your Lab 6 code here *****
-//
-
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const httpServer = createServer(app);
@@ -179,6 +174,21 @@ io.on("connection", (socket) => {
     socket.on("get users", () => {
         // Send the online users to the browser
         socket.emit("users", JSON.stringify(onlineUsers));
+    });
+
+    socket.on("send invite", (inviter, invitee) => {
+        // Send the invite to the user
+        io.emit("show invite", JSON.stringify(inviter), JSON.stringify(invitee));
+    });
+
+    socket.on("accept invite", (inviter) => {
+        // Send the accept invite to the user
+        io.emit("show accept invite", JSON.stringify(inviter));
+    });
+
+    socket.on("decline invite", (inviter) => {
+        // Send the decline invite to the user
+        io.emit("show decline invite", JSON.stringify(inviter));
     });
 
     socket.on("disconnect", () => {

@@ -255,3 +255,20 @@ button.icon:active {
     width: 270px;
     align-self: stretch;
 }
+
+#pairing-panel {
+    background: var(--main-panel-background);
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.user-row {
+    justify-content: space-between;
+    width: 100%;
+}
+
+#invite-overlay, #countdown-overlay, #decline-notification-overlay {
+    background: var(--overlay-background);
+    text-align: center;
+}
+

@@ -71,6 +71,34 @@
         </div>
     </div>
 
+    <div id="pairing-panel" class="col">
+        <div id="pairing-area" class="col"></div>
+    </div>
+    
+    <div id="invite-overlay" class="overlay row">
+        <div class="content shadow col">
+            <div id="invite-message" class="caption"></div>
+            <div class="spacer-1"></div>
+            <button id="accept-invite">Accept</button>
+            <button id="decline-invite">Decline</button>
+        </div>
+    </div>
+
+    <div id="decline-notification-overlay" class="overlay row">
+        <div class="content shadow col">
+            <div class="caption">Your invitation was declined.</div>
+            <div class="spacer-1"></div>
+            <button id="decline-notification-ok">OK</button>
+        </div>
+    </div>
+    
+    <div id="countdown-overlay" class="overlay row">
+        <div class="content shadow col">
+            <div class="caption">Game starts in</div>
+            <div id="countdown" class="caption"></div>
+        </div>
+    </div>
+
     <script src="/socket.io/socket.io.min.js"></script>
     <script src="scripts/socket.js"></script>
     <script src="scripts/avatar.js"></script>
@@ -94,6 +122,7 @@
             () => { SignInForm.show(); }
         );
     });
+
     $(function() {
         /* Get the canvas and 2D context */
         const cv = $("canvas").get(0);
@@ -219,6 +248,8 @@
             requestAnimationFrame(doFrame);
         });
     });
+    
+    
     </script>
 </body>
 </html>
