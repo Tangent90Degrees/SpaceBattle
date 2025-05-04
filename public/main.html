@@ -10,7 +10,7 @@
     <div id="container" class="col">
         <div id="header" class="row">
             <div id="title">Space Battle
-                <span class="material-icons">chat</span>
+                <span class="material-icons">rocket</span>
             </div>
 
             <div class="spacer-grow"></div>
@@ -25,12 +25,8 @@
         </div>
 
         <div id="main-panel" class="row">
-            <div id="chat-panel" class="col">
-                <div id="chat-area" class="col"></div>
-                <div id="typing"></div>
-                <form id="chat-input-form" autocomplete="off">
-                    <input id="chat-input" placeholder="Enter your message"></input>
-                </form>
+            <div id="pairing-panel" class="col">
+                <div id="pairing-area" class="col"></div>
             </div>
 
             <div id="online-users-panel" class="col">
@@ -69,10 +65,6 @@
                 <div id="register-message" class="warning center"></div>
             </form>
         </div>
-    </div>
-
-    <div id="pairing-panel" class="col">
-        <div id="pairing-area" class="col"></div>
     </div>
     
     <div id="invite-overlay" class="overlay row">
@@ -141,7 +133,7 @@
         const totalGameTime = 180;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         let gameStartTime = 0;      // The timestamp when the game starts
-        let collectedGems = 0;      // The number of gems collected in the game
+        let score = 0;      // The score of the player in the game
 
         /* Create the game area */
         const gameArea = BoundingBox(context, 165, 60, 420, 800);

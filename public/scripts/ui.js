@@ -139,6 +139,10 @@ const OnlineUsersPanel = (function() {
                 onlineUsersArea.append(
                     $("<div id='username-" + username + "'></div>")
                         .append(UI.getUserDisplay(onlineUsers[username]))
+                        .append(
+                            $("<button class='invite-button'>Invite</button>")
+                                .data("username", username)
+                        )
                 );
             }
         }
