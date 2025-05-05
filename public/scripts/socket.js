@@ -54,13 +54,22 @@ const Socket = (function() {
         socket.on("show accept invite", (inviter) => {
             inviter = JSON.parse(inviter);
             if (inviter.username == Authentication.getUser().username)
-                PairingPanel.startCountdown();
+                PairingPanel.startCountdown(1);
         });
 
         socket.on("show decline invite", (inviter) => {
             inviter = JSON.parse(inviter);
             if (inviter.username == Authentication.getUser().username)
                 PairingPanel.showDeclineInvite();
+        });
+
+        socket.on("show new position", (player) => {
+            player = JSON.parse(player);
+            if (playerId == 1 && player.playerId == 2) {
+                player2.setPosition(data.x, data.y);
+            } else if (playerId == 2 && data.playerId == 1) {
+                player1.setPosition(data.x, data.y);
+            }
         });
     };
 
@@ -89,6 +98,17 @@ const Socket = (function() {
             socket.emit("decline invite");
     }
 
+    const updatePlayerPosition = function(player) {
+        if (socket && socket.connected) {
+            if (playerId === 1) {
+                player1.update();
+                socket.emit("update player position", { playerId: 1, x: player1.getX(), y: player1.getY() });
+            } else {
+                player2.update();
+                socket.emit("update player position", { playerId: 2, x: player2.getX(), y: player2.getY() });
+            }
+        }
+    }
 
     return { getSocket, connect, disconnect, sendInvite, acceptInvite, declineInvite };
 })();
