@@ -194,7 +194,7 @@ const PairingPanel = (function() {
         $(document).on("click", "#accept-invite", function(inviter) {
             Socket.acceptInvite(inviter);
             $("#invite-overlay").hide();
-            startCountdown();
+            startCountdown(2);
         });
 
         // Handle decline button click
@@ -245,7 +245,7 @@ const PairingPanel = (function() {
     };
 
     // This function starts the countdown before the game
-    const startCountdown = function() {
+    const startCountdown = function(playerId) {
         let countdown = 5;
         $("#countdown").text(countdown);
         $("#countdown-overlay").fadeIn(500);
@@ -258,7 +258,7 @@ const PairingPanel = (function() {
                 clearInterval(interval);
                 $("#countdown-overlay").fadeOut(500);
                 // Transition to the game screen (to be implemented)
-                console.log("Game starts now!");
+                Game.startGame(playerId);
             }
         }, 1000);
     };

@@ -17,34 +17,75 @@ const Game = (function() {
         gameArea = BoundingBox(context, 0, 0, canvas.height, canvas.width);
 
         // Create players
-        player1 = Player(context, 150, canvas.height - 50, gameArea);
-        player2 = Player(context, canvas.width - 150, canvas.height - 50, gameArea);
+        if (playerId == 1) {
+            player1 = Player(context, 150, canvas.height - 50, gameArea, "blue");
+            player2 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "red", true); // Remote player
+        } else {
+            player1 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "red", true); // Remote player
+            player2 = Player(context, 150, canvas.height - 50, gameArea, "blue");
+        }
 
-        // Set up controls for player 1 (WASD + Space)
-        $(document).on("keydown", (e) => {
-            if (e.key === "a") player1.move(1);
-            if (e.key === "d") player1.move(3);
-            if (e.key === " ") shootBullet(player1);
+        // Set up controls for the local player
+        $(document).on("keydown", function(event) {
+            if (playerId == 1) {
+                if (event.keyCode == 37)
+                    player1.move(1);
+                else if (event.keyCode == 38)
+                    player1.move(2);
+                else if (event.keyCode == 39)
+                    player1.move(3);
+                else if (event.keyCode == 40)
+                    playe1.move(4);
+                else if (event.keyCode == 32)
+                    player1.speedUp();
+                else if (event.keyCode == 66)
+                    shootBullet(player1);
+            }
+            else if (playerId == 2) {
+                if (event.keyCode == 37)
+                    player2.move(1);
+                else if (event.keyCode == 38)
+                    player2.move(2);
+                else if (event.keyCode == 39)
+                    player2.move(3);
+                else if (event.keyCode == 40)
+                    player2.move(4);
+                else if (event.keyCode == 32)
+                    player2.speedUp();
+                else if (event.keyCode == 66)
+                    shootBullet(player2);
+            }
         });
-        $(document).on("keyup", (e) => {
-            if (e.key === "a") player1.stop(1);
-            if (e.key === "d") player1.stop(3);
-        });
-
-        // Set up controls for player 2 (Arrow keys + Enter)
-        $(document).on("keydown", (e) => {
-            if (e.key === "ArrowLeft") player2.move(1);
-            if (e.key === "ArrowRight") player2.move(3);
-            if (e.key === "Enter") shootBullet(player2);
-        });
-        $(document).on("keyup", (e) => {
-            if (e.key === "ArrowLeft") player2.stop(1);
-            if (e.key === "ArrowRight") player2.stop(3);
+        $(document).on("keyup", function(event) {
+            if (playerId == 1) {
+                if (event.keyCode == 37)
+                    player1.stop(1);
+                else if (event.keyCode == 38)
+                    player1.stop(2);
+                else if (event.keyCode == 39)
+                    player1.stop(3);
+                else if (event.keyCode == 40)
+                    player1.stop(4);
+                else if (event.keyCode == 32)
+                    player1.slowDown();
+            }
+            else if (playerId == 2) {
+                if (event.keyCode == 37)
+                    player2.stop(1);
+                else if (event.keyCode == 38)
+                    player2.stop(2);
+                else if (event.keyCode == 39)
+                    player2.stop(3);
+                else if (event.keyCode == 40)
+                    player2.stop(4);
+                else if (event.keyCode == 32)
+                    player2.slowDown();
+            }
         });
 
         // Start the game loop
-        startGame();
-    };
+        startGame(playerId);
+        };
 
     // Shoot a bullet
     const shootBullet = function(player) {
@@ -68,8 +109,8 @@ const Game = (function() {
     // Update game objects
     const update = function() {
         // Update players
-        player1.update(performance.now());
-        player2.update(performance.now());
+        Socket.updatePlayerPosition(player1);
+        Socket.updatePlayerPosition(player2);
 
         // Move bullets
         bullets.forEach((bullet, index) => {
@@ -117,10 +158,10 @@ const Game = (function() {
     };
 
     // Start the game loop
-    const startGame = function() {
+    const startGame = function(playerId) {
         alienSpawnTimer = setInterval(spawnAlien, alienSpawnInterval);
         gameInterval = setInterval(() => {
-            update();
+            update(playerId);
             draw();
         }, 1000 / 60); // 60 FPS
     };
