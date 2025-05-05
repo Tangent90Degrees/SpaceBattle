@@ -243,8 +243,20 @@
             requestAnimationFrame(doFrame);
         });
     });
-    
-    
+
+    $(function() {
+        // Populate the avatar dropdown
+        Avatar.populate($("#register-avatar"));
+
+        // Update the avatar preview when an avatar is selected
+        $("#register-avatar").on("change", function() {
+            const selectedAvatar = $(this).val();
+            const avatarCode = Avatar.getCode(selectedAvatar);
+            $("#selected-avatar").html(avatarCode);
+        });
+
+        // ...existing code...
+    });
     </script>
 </body>
 </html>
