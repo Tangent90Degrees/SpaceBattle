@@ -34,9 +34,9 @@ app.post("/register", (req, res) => {
     const { username, avatar, name, password } = req.body;
 
     //
-    // D. Reading the users.json file
+    // D. Reading the players.json file
     //
-    const users = JSON.parse(fs.readFileSync("data/users.json"));
+    const users = JSON.parse(fs.readFileSync("data/players.json"));
 
     //
     // E. Checking for the user data correctness
@@ -65,9 +65,9 @@ app.post("/register", (req, res) => {
     users[username] = { avatar, name, password: hash };
 
     //
-    // H. Saving the users.json file
+    // H. Saving the players.json file
     //
-    fs.writeFileSync("data/users.json", JSON.stringify(users, null, " "));
+    fs.writeFileSync("data/players.json", JSON.stringify(users, null, " "));
 
     //
     // I. Sending a success response to the browser
@@ -84,9 +84,9 @@ app.post("/signin", (req, res) => {
     const { username, password } = req.body;
 
     //
-    // D. Reading the users.json file
+    // D. Reading the players.json file
     //
-    const users = JSON.parse(fs.readFileSync("data/users.json"));
+    const users = JSON.parse(fs.readFileSync("data/players.json"));
 
     //
     // E. Checking for username/password
