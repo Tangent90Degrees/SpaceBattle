@@ -238,6 +238,10 @@ button.icon:active {
     justify-content: start;
     overflow-y: auto;
 }
+#invite-button{
+    border-radius: 6px;
+    font-size: 14px;
+}
 
 /* Signin overlay */
 #signin-form {

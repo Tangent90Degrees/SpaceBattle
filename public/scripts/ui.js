@@ -139,10 +139,7 @@ const OnlineUsersPanel = (function() {
                 onlineUsersArea.append(
                     $("<div id='username-" + username + "'></div>")
                         .append(UI.getUserDisplay(onlineUsers[username]))
-                        .append(
-                            $("<button class='invite-button'>Invite</button>")
-                                .data("username", username)
-                        )
+                        .append($("<button class='invite-button'>Invite</button>").data("user", JSON.stringify(onlineUsers[username])))
                 );
             }
         }
@@ -160,6 +157,7 @@ const OnlineUsersPanel = (function() {
 			onlineUsersArea.append(
 				$("<div id='username-" + user.username + "'></div>")
 					.append(UI.getUserDisplay(user))
+                    .append($("<button class='invite-button'>Invite</button>").data("user", JSON.stringify(user)))
 			);
 		}
 	};
@@ -175,74 +173,53 @@ const OnlineUsersPanel = (function() {
 		if (userDiv.length > 0) userDiv.remove();
 	};
 
-    return { initialize, update, addUser, removeUser };
-})();
+    $(document).on("click", ".invite-button", function() {
+        const invitedUser = JSON.parse($(this).data("user"));
+        console.log("Inviting user: ", invitedUser.username);
+        Socket.sendInvite(Authentication.getUser(), invitedUser);
+    });
 
-const PairingPanel = (function() {
-    // This function initializes the pairing UI
-    const initialize = function() {
-        // Hide the pairing panel initially
-        $("#pairing-panel").hide();
+    // Handle accept button click
+    $(document).on("click", "#accept-invite", function() {
+        const inviter = $(this).data("inviter");
+        Socket.acceptInvite(inviter);
+        $("#invite-overlay").hide();
+        startCountdown(2);
+    });
 
-        // Handle invite button click
-        $(document).on("click", ".invite-button", function() {
-            const invitedUser = $(this).data("username");
-            Socket.sendInvite(Authentication.getUser(), invitedUser);
-        });
+    // Handle decline button click
+    $(document).on("click", "#decline-invite", function() {
+        const inviter = $(this).data("inviter");
+        Socket.declineInvite(inviter);
+        $("#invite-overlay").hide();
+    });
 
-        // Handle accept button click
-        $(document).on("click", "#accept-invite", function(inviter) {
-            Socket.acceptInvite(inviter);
-            $("#invite-overlay").hide();
-            startCountdown(2);
-        });
+    $(document).on("click", "#decline-notification-ok", function() {
+        $("#decline-notification-overlay").fadeOut(500);
+    });
 
-        // Handle decline button click
-        $(document).on("click", "#decline-invite", function() {
-            Socket.declineInvite();
-            $("#invite-overlay").hide();
-        });
-
-        $(document).on("click", "#decline-notification-ok", function() {
-            $("#decline-notification-overlay").fadeOut(500);
-        });
+    // This function shows the online user panel
+    const show = function(user) {
+        $("#online-users-panel").show();
     };
 
-    // This function shows the pairing panel
-    const show = function() {
-        $("#pairing-panel").fadeIn(500);
-    };
-
-    // This function hides the pairing panel
+    // This function hides the online user panel
     const hide = function() {
-        $("#pairing-panel").fadeOut(500);
-    };
-
-    // This function updates the online users in the pairing panel
-    const update = function(onlineUsers) {
-        const pairingArea = $("#pairing-area");
-        pairingArea.empty();
-
-        const currentUser = Authentication.getUser();
-        for (const username in onlineUsers) {
-            if (username !== currentUser.username) {
-                pairingArea.append(
-                    $("<div class='user-row row'></div>")
-                        .append(UI.getUserDisplay(onlineUsers[username]))
-                        .append(
-                            $("<button class='invite-button'>Invite</button>")
-                                .data("username", username)
-                        )
-                );
-            }
-        }
+        $("#online-users-panel").fadeOut(500);
     };
 
     // This function shows the invite overlay
     const showInvite = function(inviter) {
         $("#invite-message").text(`${inviter.name} has invited you to play.`);
+        $("#accept-invite").data("inviter", inviter);
+        $("#decline-invite").data("inviter", inviter);
         $("#invite-overlay").fadeIn(500);
     };
+
+    // This function shows the decline invite overlay
+    const showDeclineInvite = function() {
+        $("#decline-notification-overlay").fadeIn(500);
+    }
 
     // This function starts the countdown before the game
     const startCountdown = function(playerId) {
@@ -263,7 +240,7 @@ const PairingPanel = (function() {
         }, 1000);
     };
 
-    return { initialize, show, hide, update, showInvite };
+    return { initialize, update, addUser, removeUser, show, hide, showInvite, showDeclineInvite, startCountdown };
 })();
 
 const UI = (function() {
@@ -276,7 +253,7 @@ const UI = (function() {
     };
 
     // The components of the UI are put here
-    const components = [SignInForm, UserPanel, OnlineUsersPanel, PairingPanel];
+    const components = [SignInForm, UserPanel, OnlineUsersPanel];
 
     // This function initializes the UI
     const initialize = function() {
