@@ -8,5 +8,10 @@
   "avatar": "Panda",
   "name": "Rian",
   "password": "$2b$10$c05BbYlUB5xEbGCzR04RIuGLQgvqPFcAP3M2wn23kHqoBN2T2tJ7C"
+ },
+ "ust": {
+  "avatar": "Hamster",
+  "name": "UST",
+  "password": "$2b$10$eDKN30OrBkqfx28GC8CwRuFPLv8/8KFHqFT4.w1mh7yxyZy9ThWXC"
  }
 }
