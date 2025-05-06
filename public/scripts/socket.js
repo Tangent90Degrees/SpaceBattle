@@ -48,19 +48,19 @@ const Socket = (function() {
             inviter = JSON.parse(inviter);
             invitee = JSON.parse(invitee);
             if (invitee.username == Authentication.getUser().username)
-                PairingPanel.showInvite(inviter);
+                OnlineUsersPanel.showInvite(inviter);
         });
         
         socket.on("show accept invite", (inviter) => {
             inviter = JSON.parse(inviter);
             if (inviter.username == Authentication.getUser().username)
-                PairingPanel.startCountdown(1);
+                OnlineUsersPanel.startCountdown(1);
         });
 
         socket.on("show decline invite", (inviter) => {
             inviter = JSON.parse(inviter);
             if (inviter.username == Authentication.getUser().username)
-                PairingPanel.showDeclineInvite();
+                OnlineUsersPanel.showDeclineInvite();
         });
 
         socket.on("show new position", (player) => {
@@ -82,20 +82,23 @@ const Socket = (function() {
 
     // This function sends an invite to the user
     const sendInvite = function(inviter, invitee) {
-        if (socket && socket.connected)
+        if (socket && socket.connected) {
             socket.emit("send invite", inviter, invitee);
+        }
     };
 
     // This function accepts the invite
     const acceptInvite = function(inviter) {
-        if (socket && socket.connected)
+        if (socket && socket.connected) {
             socket.emit("accept invite", inviter);
+        }
     };
 
     // This function declines the invite
-    const declineInvite = function() {
-        if (socket && socket.connected)
-            socket.emit("decline invite");
+    const declineInvite = function(inviter) {
+        if (socket && socket.connected) {
+            socket.emit("decline invite", inviter);
+        }
     }
 
     const updatePlayerPosition = function(player) {
