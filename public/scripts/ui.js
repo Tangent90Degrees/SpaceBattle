@@ -276,7 +276,7 @@ const UI = (function() {
     };
 
     // The components of the UI are put here
-    const components = [SignInForm, UserPanel, OnlineUsersPanel, ChatPanel];
+    const components = [SignInForm, UserPanel, OnlineUsersPanel, PairingPanel];
 
     // This function initializes the UI
     const initialize = function() {
