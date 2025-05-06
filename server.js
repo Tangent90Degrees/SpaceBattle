@@ -165,14 +165,20 @@ io.use((socket, next) => {
 });
 io.on("connection", (socket) => {
     const user = socket.request.session.user;
+
     // Add a new user to the online user list
     if (user) {
         onlineUsers[user.username] = { avatar: user.avatar, name: user.name };
-        io.emit("add user", JSON.stringify({ username: user.username, avatar: user.avatar, name: user.name }));
+
+        // Send the full list of online users to the newly connected client
+        socket.emit("users", JSON.stringify(onlineUsers));
+
+        // Broadcast the updated list of online users to all other clients
+        socket.broadcast.emit("users", JSON.stringify(onlineUsers));
     }
 
     socket.on("get users", () => {
-        // Send the online users to the browser
+        // Send the full list of online users to the client
         socket.emit("users", JSON.stringify(onlineUsers));
     });
 
@@ -196,16 +202,28 @@ io.on("connection", (socket) => {
         io.emit("show new position", JSON.stringify(player));
     });
 
+    // Handle user login
+    socket.on("user login", (user) => {
+        onlineUsers[user.username] = user;
+
+        // Broadcast the updated list of online users
+        io.emit("users", JSON.stringify(onlineUsers));
+    });
+
+    // Handle user logout
     socket.on("disconnect", () => {
-        if (user) {
-            // Remove the user from the online user list
+        if (user && onlineUsers[user.username]) {
             delete onlineUsers[user.username];
-            io.emit("remove user", JSON.stringify({ username: user.username, avatar: user.avatar, name: user.name }));
+
+            // Broadcast the updated list of online users
+            io.emit("users", JSON.stringify(onlineUsers));
         }
     });
 });
+
 
 // Use a web server to listen at port 8000
 httpServer.listen(8000, () => {
     console.log("The game server has started...");
 });
+

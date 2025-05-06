@@ -130,40 +130,56 @@ const OnlineUsersPanel = (function() {
         // Clear the online users area
         onlineUsersArea.empty();
 
-		// Get the current user
+        // Get the current user
         const currentUser = Authentication.getUser();
 
-        // Add the user one-by-one
+        // Add each user except the current user
         for (const username in onlineUsers) {
-            if (username != currentUser.username) {
-                onlineUsersArea.append(
-                    $("<div id='username-" + username + "'></div>")
-                        .append(UI.getUserDisplay(onlineUsers[username]))
-                        .append($("<button class='invite-button'>Invite</button>").data("user", JSON.stringify(onlineUsers[username])))
-                );
+            if (username !== currentUser.username) {
+                const userPanel = $("<div class='field-content row shadow'></div>");
+                userPanel.append(
+                    $("<span class='user-avatar'></span>").html(
+                        Avatar.getCode(onlineUsers[username].avatar)
+                    )
+                ); // Avatar
+                userPanel.append(
+                    $("<span class='user-name'></span>").text(onlineUsers[username].name)
+                ); // Username
+                userPanel.append(
+                    $("<button class='invite-button'>Invite</button>").data("user", JSON.stringify(onlineUsers[username]))
+                ); // Invite button
+                onlineUsersArea.append(userPanel);
             }
         }
     };
 
     // This function adds a user in the panel
-	const addUser = function(user) {
+    const addUser = function(user) {
         const onlineUsersArea = $("#online-users-area");
-		
-		// Find the user
-		const userDiv = onlineUsersArea.find("#username-" + user.username);
-		
-		// Add the user
-		if (userDiv.length == 0) {
-			onlineUsersArea.append(
-				$("<div id='username-" + user.username + "'></div>")
-					.append(UI.getUserDisplay(user))
-                    .append($("<button class='invite-button'>Invite</button>").data("user", JSON.stringify(user)))
-			);
-		}
-	};
+
+        // Find the user
+        const userDiv = onlineUsersArea.find("#username-" + user.username);
+
+        // Add the user if not already present
+        if (userDiv.length === 0) {
+            const userPanel = $("<div class='field-content row shadow' id='username-" + user.username + "'></div>");
+            userPanel.append(
+                $("<span class='user-avatar'></span>").html(
+                    Avatar.getCode(user.avatar)
+                )
+            ); // Avatar
+            userPanel.append(
+                $("<span class='user-name'></span>").text(user.name)
+            ); // Username
+            userPanel.append(
+                $("<button class='invite-button'>Invite</button>").data("user", JSON.stringify(user))
+            ); // Invite button
+            onlineUsersArea.append(userPanel);
+        }
+    };
 
     // This function removes a user from the panel
-	const removeUser = function(user) {
+    const removeUser = function(user) {
         const onlineUsersArea = $("#online-users-area");
 		
 		// Find the user
@@ -175,8 +191,13 @@ const OnlineUsersPanel = (function() {
 
     $(document).on("click", ".invite-button", function() {
         const invitedUser = JSON.parse($(this).data("user"));
-        console.log("Inviting user: ", invitedUser.username);
-        Socket.sendInvite(Authentication.getUser(), invitedUser);
+        const inviter = Authentication.getUser(); // Get the current user as the inviter
+        if (inviter) {
+            console.log("Inviting user: ", invitedUser.username);
+            Socket.sendInvite(inviter, invitedUser); // Pass both inviter and invitee
+        } else {
+            console.error("Inviter is undefined.");
+        }
     });
 
     // Handle accept button click

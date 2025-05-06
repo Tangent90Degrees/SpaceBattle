@@ -37,7 +37,7 @@ const Authentication = (function() {
             //
             // H. Handling the success response from the server
             //
-            if (json.status == "success") {
+            if (json.status === "success") {
                 user = json.user;
                 /* Run the onSuccess() callback */
                 onSuccess();
@@ -76,7 +76,7 @@ const Authentication = (function() {
             //
             // E. Handling the success response from the server
             //
-            if (json.status == "success") {
+            if (json.status === "success") {
                 user = json.user;
                 /* Run the onSuccess() callback */
                 onSuccess();
@@ -108,7 +108,7 @@ const Authentication = (function() {
         .then((json) => {
             console.log("successful!");
             console.log(json)
-            if (json.status == "success") {
+            if (json.status === "success") {
                 user = null;
                 /* Run the onSuccess() callback */
                 onSuccess();

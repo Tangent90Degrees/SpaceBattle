@@ -24,7 +24,7 @@ const Socket = (function() {
         socket.on("users", (onlineUsers) => {
             onlineUsers = JSON.parse(onlineUsers);
 
-            // Show the online users
+            // Update the online users panel
             OnlineUsersPanel.update(onlineUsers);
         });
 

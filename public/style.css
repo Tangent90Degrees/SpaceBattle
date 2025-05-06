@@ -226,11 +226,15 @@ button.icon:active {
 }
 
 /* Online users panel */
+#online-users-title {
+    opacity: 1;
+}
 #online-users-panel {
 	flex: 0 0 250px;
     height: 100%;
     padding: 0;
     background: var(--online-users-panel-background);
+    opacity: 1;
 }
 #online-users-area {
     flex-grow: 1;
@@ -242,6 +246,15 @@ button.icon:active {
 #invite-button{
     border-radius: 6px;
     font-size: 14px;
+}
+#online-users-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    border-bottom: 1px solid #ccc;
+    width: 100%;
 }
 
 /* Signin overlay */
