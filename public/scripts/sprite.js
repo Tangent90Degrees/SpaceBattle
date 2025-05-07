@@ -1,64 +1,67 @@
 /**
- * This function defines a Sprite module.
- * @param ctx A canvas context for drawing.
- * @param textureFile The file name of the sprite sheet.
- * @param samples The array of sprite samples.
- * @param loop If the sprite sequence is looped.
- * @returns The sprite object.
+ *
  */
-const Sprite = function (ctx, textureFile, samples = [], loop = false) {
-
+class Sprite {
     /**
-     * This is the image object for the sprite sheet.
+     * The constructor of sprites.
+     * @param ctx A canvas context for drawing.
+     * @param texture The file name of the sprite sheet.
+     * @param samples The array of sprite samples.
+     * @param loop If the sprite sequence is looped.
      */
-    let sheet = new Image
-    sheet.src = textureFile
+    constructor(ctx, texture, samples = [], loop = false) {
+        this._sheet = new Image
+        this._sheet.src = texture
 
-    /**
-     * An array containing the sprite sequence information used by the sprite containing.
-     */
-    let sequence = samples.length === 0 ? [
-        {
-            pos:    { x: 0, y: 0 },
-            size:   { width: sheet.width, height: sheet.height },
-            pivot:  { x: sheet.width / 2, y: sheet.height / 2 },
-            timing: 0
-        }
-    ] : samples
+        this._ctx = ctx
+        this._samples = samples.length === 0 ? [
+            {
+                pos:    { x: 0, y: 0 },
+                size:   { width: this._sheet.width, height: this._sheet.height },
+                pivot:  { x: this._sheet.width / 2, y: this._sheet.height / 2 },
+                timing: 0
+            }
+        ] : samples
+        this._loop = loop
 
-    /**
-     * The index indicating the current sprite sample used in the sprite sequence.
-     * @type {number}
-     */
-    let index = 0;
+        this._index = 0
+        this._lastUpdate = 0
+    }
 
-    /**
-     * The updated time of the current sprite image. Used to determine the timing to switch to the next sprite image.
-     * @type {number}
-     */
-    let lastUpdate = 0;
+    get index() {
+        return this._index
+    }
+
+    set index(value) {
+        this._index = this._loop
+            ? value % this._samples.length
+            : Math.min(value, this._samples.length - 1)
+    }
+
+    get sample() {
+        return this._samples[this.index]
+    }
 
     /**
      * Draw this sprite on the canvas.
      * @param pos The position of the pivot of the sprite on the canvas.
      * @param scale The scale of the sprite.
      */
-    function draw(pos, scale) {
-        ctx.save()
-        ctx.imageSmoothingEnabled = false
-        let sample = sequence[index]
-        ctx.drawImage(
-            sheet,
-            sample.pos.x,
-            sample.pos.y,
-            sample.size.width,
-            sample.size.height,
-            pos.x - sample.pivot.x * scale,
-            pos.y - sample.pivot.y * scale,
-            sample.size.width * scale,
-            sample.size.height * scale
+    draw(pos, scale) {
+        this._ctx.save()
+        this._ctx.imageSmoothingEnabled = false
+        this._ctx.drawImage(
+            this._sheet,
+            this.sample.pos.x,
+            this.sample.pos.y,
+            this.sample.size.width,
+            this.sample.size.height,
+            pos.x - this.sample.pivot.x * scale,
+            pos.y - this.sample.pivot.y * scale,
+            this.sample.size.width * scale,
+            this.sample.size.height * scale
         )
-        ctx.restore()
+        this._ctx.restore()
         return this
     }
 
@@ -68,30 +71,24 @@ const Sprite = function (ctx, textureFile, samples = [], loop = false) {
      * @param pos The position of the pivot of the sprite on the canvas.
      * @param scale The scale of the sprite.
      */
-    const update = function (time, pos, scale) {
-        if (lastUpdate === 0) lastUpdate = time
-        let sample = sequence[index]
-        if (time - lastUpdate > sample.timing) {
-            ctx.clearRect(
-                sample.pos.x,
-                sample.pos.y,
-                sample.size.width,
-                sample.size.height
+    update(time, pos, scale) {
+        if (this._lastUpdate === 0) this._lastUpdate = time
+        if (time - this._lastUpdate > this.sample.timing) {
+            this._ctx.clearRect(
+                this.sample.pos.x,
+                this.sample.pos.y,
+                this.sample.size.width,
+                this.sample.size.height
             )
-            draw(pos, scale)
+            this.draw(pos, scale)
 
-            index++
-            if (index === sequence.length) {
-                index = loop ? 0 : sequence.length - 1
-            }
-            lastUpdate = time
+            this.index++
+            this._lastUpdate = time
         }
 
-        if (index < sequence.length - 1 || loop) {
-            requestAnimationFrame(update)
+        if (this.index < this._samples.length - 1 || this._loop) {
+            requestAnimationFrame(this.update)
         }
         return this
     }
-
-    return { draw, update }
 }
