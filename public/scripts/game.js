@@ -117,6 +117,9 @@ const Game = (function() {
             height: 10,
             color: "yellow",
         });
+
+        // Play shooting sound
+        Sound.play("shoot");
     };
 
     // Decrease a life
@@ -167,6 +170,9 @@ const Game = (function() {
                     bullets.splice(bulletIndex, 1);
                     aliens.splice(alienIndex, 1);
 
+                    // Play explosion sound
+                    Sound.play("explosion");
+
                     // Update the scores
                     if (playerId === 1) {
                         player1Score += 10;
@@ -205,6 +211,12 @@ const Game = (function() {
 
     // Start the game loop
     const startGame = function(playerId) {
+        // Stop the starting background music
+        Sound.stop("startingBackground");
+
+        // Play the gaming background music
+        Sound.play("gamingBackground");
+
         // Hide the online-users-panel and instructions-panel
         $("#online-users-panel").hide();
         $("#instructions-panel").hide();
@@ -214,6 +226,7 @@ const Game = (function() {
         $("#timer").show();
         $("#total-score").show();
         $("#game-lives").show(); // Ensure game lives are shown
+        $("#returnButton").show();
 
         // Initialize game lives display
         updateGameLivesDisplay();
@@ -260,56 +273,74 @@ const Game = (function() {
         clearInterval(gameInterval);
         clearInterval(alienSpawnTimer);
         stopTimer();
-    
+
+        // Stop the gaming background music
+        Sound.stop("gamingBackground");
+
         // Get the scores for both players
         const player1Score = player1.getScore();
         const player2Score = player2.getScore();
-    
+
         // Submit Player 1's score
         fetch("/ranking", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ score: player1Score }),
         })
-        .then((res) => res.json())
-        .then((json) => {
-            if (json.status === "success") {
-                console.log("Player 1's score submitted successfully:", json.highestScore);
-            } else {
-                console.error("Error submitting Player 1's score:", json.error);
-            }
-        })
-        .catch((err) => {
-            console.error("Error submitting Player 1's score:", err);
-        });
-    
+            .then((res) => res.json())
+            .then((json) => {
+                if (json.status === "success") {
+                    console.log("Player 1's score submitted successfully:", json.highestScore);
+                } else {
+                    console.error("Error submitting Player 1's score:", json.error);
+                }
+            })
+            .catch((err) => {
+                console.error("Error submitting Player 1's score:", err);
+            });
+
         // Submit Player 2's score
         fetch("/ranking", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ score: player2Score }),
         })
-        .then((res) => res.json())
-        .then((json) => {
-            if (json.status === "success") {
-                console.log("Player 2's score submitted successfully:", json.highestScore);
-            } else {
-                console.error("Error submitting Player 2's score:", json.error);
-            }
-        })
-        .catch((err) => {
-            console.error("Error submitting Player 2's score:", err);
-        });
-    
+            .then((res) => res.json())
+            .then((json) => {
+                if (json.status === "success") {
+                    console.log("Player 2's score submitted successfully:", json.highestScore);
+                } else {
+                    console.error("Error submitting Player 2's score:", json.error);
+                }
+            })
+            .catch((err) => {
+                console.error("Error submitting Player 2's score:", err);
+            });
+
         // Show the rankings for Player 1 (you can modify this to show rankings for both players)
         Ranking.show({ p1Username: player1.username, p1Score: player1Score, p2Username: player2.username, p2Score: player2Score });
 
-        // Hide the total score and lives
+        // Hide the game elements
         $("#total-score").hide();
         $("#game-lives").hide();
+        $("#timer").hide();
+        $("#game-canvas").hide();
+        $("#returnButton").hide();
 
         alert("Game Over!");
     };
 
-    return { initialize, startGame, stopGame, loseLife }; // Expose loseLife for external use
+    // Stop the game and return to the menu
+    const returnToMenu = function() {
+        stopTimer();
+        $("#online-users-panel").show(); // Show the online players panel
+        $("#instructions-panel").show(); // Show the instructions panel
+        $("#returnButton").hide(); // Hide the return button
+        $("#game-canvas").hide(); // Hide the game canvas
+        $("#timer").hide(); // Hide the timer
+        $("#total-score").hide(); // Hide the total score
+        $("#game-lives").hide(); // Hide the game lives
+    };
+
+    return { initialize, startGame, stopGame, loseLife, stopTimer, returnToMenu }; // Expose returnToMenu
 })();
