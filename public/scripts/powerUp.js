@@ -3,7 +3,7 @@
 // - `x` - The initial x position of the gem
 // - `y` - The initial y position of the gem
 // - `color` - The colour of the gem
-const Alien = function(ctx, x, y, color) {
+const PowerUp = function(ctx, x, y, color) {
 
     // This is the sprite sequences of the gem of four colours
     // `green`, `red`, `yellow` and `purple`.

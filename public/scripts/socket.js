@@ -44,17 +44,18 @@ const Socket = (function() {
             OnlineUsersPanel.removeUser(user);
         });
 
-        socket.on("show invite", (inviter, invitee) => {
-            inviter = JSON.parse(inviter);
-            invitee = JSON.parse(invitee);
-            if (invitee.username == Authentication.getUser().username)
+        socket.on("show invite", (inviteData) => {
+            const { inviter, invitee } = JSON.parse(inviteData);
+            if (invitee.username === Authentication.getUser().username) {
                 OnlineUsersPanel.showInvite(inviter);
+            }
         });
         
-        socket.on("show accept invite", (inviter) => {
-            inviter = JSON.parse(inviter);
-            if (inviter.username == Authentication.getUser().username)
-                OnlineUsersPanel.startCountdown(1);
+        socket.on("show accept invite", (inviteData) => {
+            const { inviter } = JSON.parse(inviteData);
+            if (inviter.username === Authentication.getUser().username) {
+                OnlineUsersPanel.startCountdown(1); // Inviter starts as player 1
+            }
         });
 
         socket.on("show decline invite", (inviter) => {
@@ -83,14 +84,18 @@ const Socket = (function() {
     // This function sends an invite to the user
     const sendInvite = function(inviter, invitee) {
         if (socket && socket.connected) {
-            socket.emit("send invite", inviter, invitee);
+            const inviteData = {
+                inviter: { ...inviter, playerId: 1 }, // Set inviter's playerId to 1
+                invitee: { ...invitee, playerId: 2 }  // Set invitee's playerId to 2
+            };
+            socket.emit("send invite", inviteData);
         }
     };
 
     // This function accepts the invite
     const acceptInvite = function(inviter) {
         if (socket && socket.connected) {
-            socket.emit("accept invite", inviter);
+            socket.emit("accept invite", { inviter, playerId: 1 });
         }
     };
 
@@ -103,15 +108,22 @@ const Socket = (function() {
 
     const updatePlayerPosition = function(player) {
         if (socket && socket.connected) {
-            if (playerId === 1) {
-                player1.update();
-                socket.emit("update player position", { playerId: 1, x: player1.getX(), y: player1.getY() });
-            } else {
-                player2.update();
-                socket.emit("update player position", { playerId: 2, x: player2.getX(), y: player2.getY() });
-            }
+            const playerData = {
+                playerId: playerId,
+                x: player.getBoundingBox().getPoints().topLeft[0],
+                y: player.getBoundingBox().getPoints().topLeft[1]
+            };
+            socket.emit("update player position", playerData);
         }
-    }
+    };
 
-    return { getSocket, connect, disconnect, sendInvite, acceptInvite, declineInvite };
+    return {
+        getSocket,
+        connect,
+        disconnect,
+        sendInvite,
+        acceptInvite,
+        declineInvite,
+        updatePlayerPosition // Expose the function here
+    };
 })();

@@ -1,9 +1,9 @@
-// This function defines the Player module.
+// This function defines the Player1 module.
 // - `ctx` - A canvas context for drawing
 // - `x` - The initial x position of the player
 // - `y` - The initial y position of the player
 // - `gameArea` - The bounding box of the game area
-const Player = function(ctx, x, y, gameArea) {
+const Player1 = function(ctx, x, y, gameArea) {
 
     // This is the sprite sequences of the player facing different directions.
     // It contains the idling sprite sequences `idleLeft`, `idleUp`, `idleRight` and `idleDown`,
@@ -27,9 +27,9 @@ const Player = function(ctx, x, y, gameArea) {
 
     // The sprite object is configured for the player sprite here.
     sprite.setSequence(sequences.idleDown)
-          .setScale(2)
-          .setShadowScale({ x: 0.75, y: 0.20 })
-          .useSheet("player_sprite.png");
+        .setScale(2)
+        .setShadowScale({ x: 0.75, y: 0.20 })
+        .useSheet("player1_sprite.png");
 
     // This is the moving direction, which can be a number from 0 to 4:
     // - `0` - not moving
@@ -45,7 +45,7 @@ const Player = function(ctx, x, y, gameArea) {
     // This function sets the player's moving direction.
     // - `dir` - the moving direction (1: Left, 2: Up, 3: Right, 4: Down)
     const move = function(dir) {
-        if (dir >= 1 && dir <= 4 && dir != direction) {
+        if (dir >= 1 && dir <= 4 && dir !== direction) {
             switch (dir) {
                 case 1: sprite.setSequence(sequences.moveLeft); break;
                 case 2: sprite.setSequence(sequences.moveUp); break;
@@ -59,7 +59,7 @@ const Player = function(ctx, x, y, gameArea) {
     // This function stops the player from moving.
     // - `dir` - the moving direction when the player is stopped (1: Left, 2: Up, 3: Right, 4: Down)
     const stop = function(dir) {
-        if (direction == dir) {
+        if (direction === dir) {
             switch (dir) {
                 case 1: sprite.setSequence(sequences.idleLeft); break;
                 case 2: sprite.setSequence(sequences.idleUp); break;
@@ -84,7 +84,7 @@ const Player = function(ctx, x, y, gameArea) {
     // - `time` - The timestamp when this function is called
     const update = function(time) {
         /* Update the player if the player is moving */
-        if (direction != 0) {
+        if (direction !== 0) {
             let { x, y } = sprite.getXY();
 
             /* Move the player */

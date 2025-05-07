@@ -17,75 +17,76 @@ const Game = (function() {
         gameArea = BoundingBox(context, 0, 0, canvas.height, canvas.width);
 
         // Create players
-        if (playerId == 1) {
-            player1 = Player(context, 150, canvas.height - 50, gameArea, "blue");
-            player2 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "red", true); // Remote player
+        if (playerId === 1) {
+            player1 = Player1(context, 150, canvas.height - 50, gameArea, "blue");
+            player2 = Player1(context, canvas.width - 150, canvas.height - 50, gameArea, "red", true); // Remote player
         } else {
-            player1 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "red", true); // Remote player
-            player2 = Player(context, 150, canvas.height - 50, gameArea, "blue");
+            player1 = Player1(context, canvas.width - 150, canvas.height - 50, gameArea, "red", true); // Remote player
+            player2 = Player1(context, 150, canvas.height - 50, gameArea, "blue");
         }
 
         // Set up controls for the local player
         $(document).on("keydown", function(event) {
-            if (playerId == 1) {
-                if (event.keyCode == 37)
+            if (playerId === 1) {
+                if (event.keyCode === 37)
                     player1.move(1);
-                else if (event.keyCode == 38)
+                else if (event.keyCode === 38)
                     player1.move(2);
-                else if (event.keyCode == 39)
+                else if (event.keyCode === 39)
                     player1.move(3);
-                else if (event.keyCode == 40)
-                    playe1.move(4);
-                else if (event.keyCode == 32)
+                else if (event.keyCode === 40)
+                    player1.move(4);
+                else if (event.keyCode === 32)
                     player1.speedUp();
-                else if (event.keyCode == 66)
+                else if (event.keyCode === 66)
                     shootBullet(player1);
             }
-            else if (playerId == 2) {
-                if (event.keyCode == 37)
+            else if (playerId === 2) {
+                if (event.keyCode === 37)
                     player2.move(1);
-                else if (event.keyCode == 38)
+                else if (event.keyCode === 38)
                     player2.move(2);
-                else if (event.keyCode == 39)
+                else if (event.keyCode === 39)
                     player2.move(3);
-                else if (event.keyCode == 40)
+                else if (event.keyCode === 40)
                     player2.move(4);
-                else if (event.keyCode == 32)
+                else if (event.keyCode === 32)
                     player2.speedUp();
-                else if (event.keyCode == 66)
+                else if (event.keyCode === 66)
                     shootBullet(player2);
             }
         });
+
         $(document).on("keyup", function(event) {
-            if (playerId == 1) {
-                if (event.keyCode == 37)
+            if (playerId === 1) {
+                if (event.keyCode === 37)
                     player1.stop(1);
-                else if (event.keyCode == 38)
+                else if (event.keyCode === 38)
                     player1.stop(2);
-                else if (event.keyCode == 39)
+                else if (event.keyCode === 39)
                     player1.stop(3);
-                else if (event.keyCode == 40)
+                else if (event.keyCode === 40)
                     player1.stop(4);
-                else if (event.keyCode == 32)
+                else if (event.keyCode === 32)
                     player1.slowDown();
             }
-            else if (playerId == 2) {
-                if (event.keyCode == 37)
+            else if (playerId === 2) {
+                if (event.keyCode === 37)
                     player2.stop(1);
-                else if (event.keyCode == 38)
+                else if (event.keyCode === 38)
                     player2.stop(2);
-                else if (event.keyCode == 39)
+                else if (event.keyCode === 39)
                     player2.stop(3);
-                else if (event.keyCode == 40)
+                else if (event.keyCode === 40)
                     player2.stop(4);
-                else if (event.keyCode == 32)
+                else if (event.keyCode === 32)
                     player2.slowDown();
             }
         });
 
         // Start the game loop
         startGame(playerId);
-        };
+    };
 
     // Shoot a bullet
     const shootBullet = function(player) {
@@ -172,5 +173,5 @@ const Game = (function() {
         clearInterval(alienSpawnTimer);
     };
 
-    return { initialize, stopGame };
+    return { initialize, startGame, stopGame }; // Expose startGame
 })();

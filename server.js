@@ -182,14 +182,14 @@ io.on("connection", (socket) => {
         socket.emit("users", JSON.stringify(onlineUsers));
     });
 
-    socket.on("send invite", (inviter, invitee) => {
-        // Send the invite to the user
-        io.emit("show invite", JSON.stringify(inviter), JSON.stringify(invitee));
+    socket.on("send invite", (inviteData) => {
+        const { inviter, invitee } = inviteData;
+        io.emit("show invite", JSON.stringify({ inviter, invitee }));
     });
 
-    socket.on("accept invite", (inviter) => {
-        // Send the accept invite to the user
-        io.emit("show accept invite", JSON.stringify(inviter));
+    socket.on("accept invite", (inviteData) => {
+        const { inviter } = inviteData;
+        io.emit("show accept invite", JSON.stringify({ inviter }));
     });
 
     socket.on("decline invite", (inviter) => {
