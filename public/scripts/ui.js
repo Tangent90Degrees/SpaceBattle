@@ -3,7 +3,7 @@ const SignInForm = (function() {
     const initialize = function() {
         // Populate the avatar selection
         Avatar.populate($("#register-avatar"));
-        
+
         // Hide it
         $("#signin-overlay").hide();
 
@@ -22,6 +22,9 @@ const SignInForm = (function() {
                     hide();
                     UserPanel.update(Authentication.getUser());
                     UserPanel.show();
+
+                    // Play the starting background music
+                    Sound.play("startingBackground");
 
                     Socket.connect();
                 },
@@ -85,6 +88,17 @@ const UserPanel = (function() {
             // Send a signout request
             Authentication.signout(
                 () => {
+                    // Stop the all background music
+                    Sound.stop("startingBackground");
+                    Sound.stop("gamingBackground");
+
+                    // Stop the timer and hide game elements
+                    Game.stopTimer(); // Stop the timer
+                    $("#timer").hide();
+                    $("#total-score").hide();
+                    $("#game-lives").hide();
+                    $("#game-canvas").hide();
+
                     Socket.disconnect();
 
                     hide();
@@ -183,13 +197,13 @@ const OnlineUsersPanel = (function() {
     // This function removes a user from the panel
     const removeUser = function(user) {
         const onlineUsersArea = $("#online-users-area");
-		
-		// Find the user
-		const userDiv = onlineUsersArea.find("#username-" + user.username);
-		
-		// Remove the user
-		if (userDiv.length > 0) userDiv.remove();
-	};
+
+        // Find the user
+        const userDiv = onlineUsersArea.find("#username-" + user.username);
+
+        // Remove the user
+        if (userDiv.length > 0) userDiv.remove();
+    };
 
     $(document).on("click", ".invite-button", function() {
         const invitee = $(this).data("user");
@@ -262,7 +276,7 @@ const UI = (function() {
     const getUserDisplay = function(user) {
         return $("<div class='field-content row shadow'></div>")
             .append($("<span class='user-avatar'>" +
-			        Avatar.getCode(user.avatar) + "</span>"))
+                Avatar.getCode(user.avatar) + "</span>"))
             .append($("<span class='user-name'>" + user.name + "</span>"));
     };
 

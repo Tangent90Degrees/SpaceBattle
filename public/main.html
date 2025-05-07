@@ -7,125 +7,127 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
-    <div id="start-container" class="col">
-        <div id="header" class="row">
-            <div id="title">Space Battle
-                <span class="material-icons">rocket</span>
-            </div>
-
-            <div class="spacer-grow"></div>
-
-            <div id="user-panel" class="row">
-                <div class="field-content row shadow">
-                    <span class="user-avatar"></span>
-                    <span class="user-name">-</span>
-                </div>
-                <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
-            </div>
+<div id="start-container" class="col">
+    <div id="header" class="row">
+        <div id="title">Space Battle
+            <span class="material-icons">rocket</span>
         </div>
 
-        
-        <div id="main-panel" class="row">
-            <div id="timer" class="timer">03:00</div> <!-- Timer -->
-            <div id="total-score" class="score">Total Score: 0</div> <!-- Total Score -->
-            <div id="game-lives" class="lives"></div> <!-- Game Lives added here -->
-            <!-- Left part: Instructions -->
-            <div id="instructions-panel" class="col">
-                <div id="instructions-title" class="caption">Instructions</div>
-                <div id="instructions-content" class="col">
-                    <p>Welcome to Space Battle!</p>
-                    <ul>
-                        <li>Use arrow keys to move your spaceship.</li>
-                        <li>Press the "B" button to shoot.</li>
-                        <li>Invite other players to join the game.</li>
-                        <li>Defeat aliens to score points.</li>
-                    </ul>
-                </div>
+        <div class="spacer-grow"></div>
+
+        <div id="user-panel" class="row">
+            <div class="field-content row shadow">
+                <span class="user-avatar"></span>
+                <span class="user-name">-</span>
             </div>
-
-            <!-- Right part: Online Users and Invite-->
-            <div id="online-users-panel" class="col">
-                <div id="online-users-title" class="caption">Online Players</div>
-                <div id="online-users-area" class="col"></div>
-            </div>
-
-            <!-- Game Canvas -->
-            <canvas id="game-canvas">
-
-            </canvas> <!-- Added game canvas -->
+            <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
         </div>
     </div>
 
-    <div id="signin-overlay" class="overlay row">
-        <div class="content shadow row">
-            <form id="signin-form" class="col">
-                <div class="caption">SIGN IN WITH YOUR ACCOUNT</div>
-                <div class="spacer-0"></div>
-                <input id="signin-username" placeholder="Enter your username"></input>
-                <input id="signin-password" type="password" placeholder="Enter your password"></input>
-                <div class="spacer-0"></div>
-                <button type="submit">Sign In</button>
-                <div id="signin-message" class="warning center"></div>
-                <div class="spacer-grow"></div>
-            </form>
 
+    <div id="main-panel" class="row">
+        <div id="timer" class="timer">03:00</div> <!-- Timer -->
+        <div id="total-score" class="score">Total Score: 0</div> <!-- Total Score -->
+        <div id="game-lives" class="lives"></div> <!-- Game Lives added here -->
+        <!-- Left part: Instructions -->
+        <div id="instructions-panel" class="col">
+            <div id="instructions-title" class="caption">Instructions</div>
+            <div id="instructions-content" class="col">
+                <p>Welcome to Space Battle!</p>
+                <ul>
+                    <li>Use arrow keys to move your spaceship.</li>
+                    <li>Press the "B" button to shoot.</li>
+                    <li>Invite other players to join the game.</li>
+                    <li>Defeat aliens to score points.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right part: Online Users and Invite-->
+        <div id="online-users-panel" class="col">
+            <div id="online-users-title" class="caption">Online Players</div>
+            <div id="online-users-area" class="col"></div>
+        </div>
+
+        <!-- Game Canvas -->
+        <canvas id="game-canvas">
+
+        </canvas> <!-- Added game canvas -->
+        <button id="returnButton">Return to Menu</button>
+    </div>
+</div>
+
+<div id="signin-overlay" class="overlay row">
+    <div class="content shadow row">
+        <form id="signin-form" class="col">
+            <div class="caption">SIGN IN WITH YOUR ACCOUNT</div>
             <div class="spacer-0"></div>
+            <input id="signin-username" placeholder="Enter your username"></input>
+            <input id="signin-password" type="password" placeholder="Enter your password"></input>
+            <div class="spacer-0"></div>
+            <button type="submit">Sign In</button>
+            <div id="signin-message" class="warning center"></div>
+            <div class="spacer-grow"></div>
+        </form>
 
-            <form id="register-form" class="col">
-                <div class="caption">OR, REGISTER IF YOU DO NOT HAVE ONE</div>
-                <div class="spacer-0"></div>
-                <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
-                <select id="register-avatar">
-                    <option value="">Select your avatar</option>
-                </select>
-                <input id="register-name" maxlength="16" placeholder="Enter your name"></input>
-                <input id="register-password" type="password" placeholder="Enter your password"></input>
-                <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
-                <div class="spacer-0"></div>
-                <button type="submit">Register</button>
-                <div id="register-message" class="warning center"></div>
-            </form>
-        </div>
+        <div class="spacer-0"></div>
+
+        <form id="register-form" class="col">
+            <div class="caption">OR, REGISTER IF YOU DO NOT HAVE ONE</div>
+            <div class="spacer-0"></div>
+            <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
+            <select id="register-avatar">
+                <option value="">Select your avatar</option>
+            </select>
+            <input id="register-name" maxlength="16" placeholder="Enter your name"></input>
+            <input id="register-password" type="password" placeholder="Enter your password"></input>
+            <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
+            <div class="spacer-0"></div>
+            <button type="submit">Register</button>
+            <div id="register-message" class="warning center"></div>
+        </form>
     </div>
+</div>
 
-    <div id="invite-overlay" class="overlay row">
-        <div id="content-shadow-1" class="content shadow col">
-            <div id="invite-message" class="caption"></div>
-            <div class="spacer-1"></div>
-            <button id="accept-invite">Accept</button>
-            <button id="decline-invite">Decline</button>
-        </div>
+<div id="invite-overlay" class="overlay row">
+    <div id="content-shadow-1" class="content shadow col">
+        <div id="invite-message" class="caption"></div>
+        <div class="spacer-1"></div>
+        <button id="accept-invite">Accept</button>
+        <button id="decline-invite">Decline</button>
     </div>
+</div>
 
-    <div id="decline-notification-overlay" class="overlay row">
-        <div id="content-shadow-2" class="content shadow col">
-            <div class="caption">Your invitation was declined.</div>
-            <div class="spacer-1"></div>
-            <button id="decline-notification-ok">OK</button>
-        </div>
+<div id="decline-notification-overlay" class="overlay row">
+    <div id="content-shadow-2" class="content shadow col">
+        <div class="caption">Your invitation was declined.</div>
+        <div class="spacer-1"></div>
+        <button id="decline-notification-ok">OK</button>
     </div>
+</div>
 
-    <div id="countdown-overlay" class="overlay row">
-        <div id="content-shadow-3" class="content shadow col">
-            <div class="caption">Game starts in</div>
-            <div id="countdown" class="caption"></div>
-        </div>
+<div id="countdown-overlay" class="overlay row">
+    <div id="content-shadow-3" class="content shadow col">
+        <div class="caption">Game starts in</div>
+        <div id="countdown" class="caption"></div>
     </div>
+</div>
 
-    <script src="/socket.io/socket.io.min.js"></script>
-    <script src="scripts/socket.js"></script>
-    <script src="scripts/avatar.js"></script>
-    <script src="scripts/ui.js"></script>
-    <script src="scripts/registration.js"></script>
-    <script src="scripts/authentication.js"></script>
-    <script src="scripts/sprite.js"></script>
-    <script src="scripts/game.js"></script>
-    <script src="scripts/powerUp.js"></script>
-    <script src="scripts/player1.js"></script>
-    <script src="scripts/player2.js"></script>
-    <script src="scripts/alien.js"></script>
-    <script src="scripts/bounding_box.js"></script>
-    <script>
+<script src="/socket.io/socket.io.min.js"></script>
+<script src="scripts/socket.js"></script>
+<script src="scripts/avatar.js"></script>
+<script src="scripts/ui.js"></script>
+<script src="scripts/registration.js"></script>
+<script src="scripts/authentication.js"></script>
+<script src="scripts/sprite.js"></script>
+<script src="scripts/game.js"></script>
+<script src="scripts/sound.js"></script>
+<script src="scripts/powerUp.js"></script>
+<script src="scripts/player1.js"></script>
+<script src="scripts/player2.js"></script>
+<script src="scripts/alien.js"></script>
+<script src="scripts/bounding_box.js"></script>
+<script>
     $(function() {
         // Initialize the UI
         UI.initialize();
@@ -153,7 +155,25 @@
             const avatarCode = Avatar.getCode(selectedAvatar);
             $("#selected-avatar").html(avatarCode);
         });
+
+        // Handle the "Return to Menu" button click
+        $("#returnButton").on("click", function() {
+            Game.returnToMenu();
+        });
     });
-    </script>
+
+    $(function() {
+        // Load sounds
+        Sound.load("collect", "resources/collect.mp3");
+        Sound.load("enemyExplode", "resources/enemyExplode.mp3");
+        Sound.load("enemyShoot", "resources/enemyShoot.mp3");
+        Sound.load("gameOver", "resources/gameOver.mp3");
+        Sound.load("playerExplode", "resources/playerExplode.mp3");
+        Sound.load("playerShoot", "resources/playerShoot.mp3");
+        Sound.load("powerUp", "resources/power-up.mp3");
+        Sound.load("startingBackground", "resources/StartingBackground.mp3");
+        Sound.load("gamingBackground", "resources/GamingBackground.mp3");
+    });
+</script>
 </body>
 </html>
