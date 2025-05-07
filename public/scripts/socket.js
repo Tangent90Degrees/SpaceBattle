@@ -13,6 +13,8 @@ const Socket = (function() {
 
         // Wait for the socket to connect successfully
         socket.on("connect", () => {
+            socket.emit("user login", Authentication.getUser());
+            
             // Get the online user list
             socket.emit("get users");
 

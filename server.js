@@ -170,11 +170,9 @@ io.on("connection", (socket) => {
     if (user) {
         onlineUsers[user.username] = { avatar: user.avatar, name: user.name };
 
-        // Send the full list of online users to the newly connected client
-        socket.emit("users", JSON.stringify(onlineUsers));
-
         // Broadcast the updated list of online users to all other clients
-        socket.broadcast.emit("users", JSON.stringify(onlineUsers));
+        io.emit("add user", JSON.stringify({ username: user.username, avatar: user.avatar, name: user.name }));
+        io.emit("users", JSON.stringify(onlineUsers));
     }
 
     socket.on("get users", () => {
@@ -216,7 +214,7 @@ io.on("connection", (socket) => {
             delete onlineUsers[user.username];
 
             // Broadcast the updated list of online users
-            io.emit("users", JSON.stringify(onlineUsers));
+            io.emit("remove user", JSON.stringify({ username: user.username, avatar: user.avatar, name: user.name }));
         }
     });
 });
