@@ -151,12 +151,22 @@ button.icon:active {
 }
 
 /* Top level container */
-#container {
+#start-container {
     align-items: stretch;
     gap: 0px;
     width: 100%;
     height: 100%;
     padding: 0;
+    display: block;
+}
+
+#game-container{
+    align-items: stretch;
+    gap: 0px;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    display: none;
 }
 
 /* Header */
@@ -186,7 +196,7 @@ button.icon:active {
 /* Main panel */
 #main-panel {
     height: calc(100% - 80px);
-    background: url("resources/GamingScreenBackground.png") no-repeat center center;
+    background: url("resources/StartScreenBackground.png") no-repeat center center;
     background-size: cover;
 }
 

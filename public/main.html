@@ -7,7 +7,7 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
-    <div id="container" class="col">
+    <div id="start-container" class="col">
         <div id="header" class="row">
             <div id="title">Space Battle
                 <span class="material-icons">rocket</span>
@@ -30,6 +30,43 @@
                 <div id="online-users-area" class="col"></div>
             </div>
         </div>
+    </div>
+
+    <div id="game-container">
+        <canvas width="854px" height="480px"></canvas>
+
+        <svg xmlns="http://www.w3.org/2000/svg" id="counter">
+            <text x="10" y="35">
+                TIME:<tspan id="time-remaining">20</tspan>
+            </text>
+        </svg>
+
+        <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
+            <defs>
+                <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0.2" stop-color="red" />
+                    <stop offset="0.4" stop-color="yellow" />
+                    <stop offset="0.6" stop-color="green" />
+                    <stop offset="0.8" stop-color="purple" />
+                </linearGradient>
+            </defs>
+            <text id="game-title" x="50%" y="45%">SPACE BATTLE!</text>
+        </svg>
+
+        <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
+            <defs>
+                <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="red" />
+                    <stop offset="0.5" stop-color="yellow" />
+                    <stop offset="1" stop-color="red" />
+                </linearGradient>
+            </defs>
+            <text x="50%" y="50%">
+                Time's up! You have collected
+                <tspan id="final-gems">0</tspan>
+                gem(s).
+            </text>
+        </svg>
     </div>
 
     <div id="signin-overlay" class="overlay row">
@@ -125,6 +162,27 @@
             const avatarCode = Avatar.getCode(selectedAvatar);
             $("#selected-avatar").html(avatarCode);
         });
+    });
+
+    $(function() {
+        /* Get the canvas and 2D context */
+        const cv = $("canvas").get(0);
+        const context = cv.getContext("2d");
+
+        /* Create the sounds */
+        const sounds = {
+            background: new Audio("background.mp3"),
+            collect: new Audio("collect.mp3"),
+            gameOver: new Audio("resources/gameOver.mp3")
+        };
+
+        const totalGameTime = 180;   // Total game time in seconds
+        const playerLife = 5;    // The life of each player
+        let gameStartTime = 0;      // The timestamp when the game starts
+        let defeatedInvader = 0;      // The number of defeated invader in the game
+
+        /* Create the game area */
+        const gameArea = BoundingBox(context, 165, 60, 420, 800);
     });
     </script>
 </body>
