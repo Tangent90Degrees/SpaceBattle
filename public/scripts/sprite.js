@@ -1,215 +1,97 @@
-// This function defines a Sprite module.
-// - `ctx` - A canvas context for drawing
-// - `x` - The initial x position of the sprite
-// - `y` - The initial y position of the sprite
-const Sprite = function(ctx, x, y) {
+/**
+ * This function defines a Sprite module.
+ * @param ctx A canvas context for drawing.
+ * @param textureFile The file name of the sprite sheet.
+ * @param samples The array of sprite samples.
+ * @param loop If the sprite sequence is looped.
+ * @returns The sprite object.
+ */
+const Sprite = function (ctx, textureFile, samples = [], loop = false) {
 
-    // This is the image object for the sprite sheet.
-    const sheet = new Image();
+    /**
+     * This is the image object for the sprite sheet.
+     */
+    let sheet = new Image
+    sheet.src = textureFile
 
-    // This is an object containing the sprite sequence information used by the sprite containing:
-    // - `x` - The starting x position of the sprite sequence in the sprite sheet
-    // - `y` - The starting y position of the sprite sequence in the sprite sheet
-    // - `width` - The width of each sprite image
-    // - `height` - The height of each sprite image
-    // - `count` - The total number of sprite images in the sequence
-    // - `timing` - The timing for each sprite image
-    // - `loop` - `true` if the sprite sequence is looped
-    let sequence = { x: 0, y: 0, width: 20, height: 20, count: 1, timing: 0, loop: false };
+    /**
+     * An array containing the sprite sequence information used by the sprite containing.
+     */
+    let sequence = samples.length === 0 ? [
+        {
+            pos:    { x: 0, y: 0 },
+            size:   { width: sheet.width, height: sheet.height },
+            pivot:  { x: sheet.width / 2, y: sheet.height / 2 },
+            timing: 0
+        }
+    ] : samples
 
-    // This is the index indicating the current sprite image used in the sprite sequence.
+    /**
+     * The index indicating the current sprite sample used in the sprite sequence.
+     * @type {number}
+     */
     let index = 0;
 
-    // This is the scaling factor for drawing the sprite.
-    let scale = 1;
-
-    // This is the scaling factor to determine the size of the shadow, relative to the scaled sprite image size.
-    // - `x` - The x scaling factor
-    // - `y` - The y scaling factor
-    let shadowScale = { x: 1, y: 0.25 };
-
-    // This is the updated time of the current sprite image.
-    // It is used to determine the timing to switch to the next sprite image.
+    /**
+     * The updated time of the current sprite image. Used to determine the timing to switch to the next sprite image.
+     * @type {number}
+     */
     let lastUpdate = 0;
 
-    // This function uses a new sprite sheet in the image object.
-    // - `spriteSheet` - The source of the sprite sheet (URL)
-    const useSheet = function(spriteSheet) {
-        sheet.src = spriteSheet;
-        return this;
-    };
-
-    // This function returns the readiness of the sprite sheet image.
-    const isReady = function() {
-        return sheet.complete && sheet.naturalHeight !== 0;
-    };
-
-    // This function gets the current sprite position.
-    const getXY = function() {
-        return {x, y};
-    };
-
-    // This function sets the sprite position.
-    // - `xvalue` - The new x position
-    // - `yvalue` - The new y position
-    const setXY = function(xvalue, yvalue) {
-        [x, y] = [xvalue, yvalue];
-        return this;
-    };
-
-    // This function sets the sprite sequence.
-    // - `newSequence` - The new sprite sequence to be used by the sprite
-    const setSequence = function(newSequence) {
-        sequence = newSequence;
-        index = 0;
-        lastUpdate = 0;
-        return this;
-    };
-
-    // This function sets the scaling factor of the sprite.
-    // - `value` - The new scaling factor
-    const setScale = function(value) {
-        scale = value;
-        return this;
-    };
-
-    // This function sets the scaling factor of the sprite shadow.
-    // - `value` - The new scaling factor as an object
-    //   - `value.x` - The x scaling factor
-    //   - `value.y` - The y scaling factor
-    const setShadowScale = function(value) {
-        shadowScale = value;
-        return this;
-    };
-
-    // This function gets the display size of the sprite.
-    const getDisplaySize = function() {
-        /* Find the scaled width and height of the sprite */
-        const scaledWidth  = sequence.width * scale;
-        const scaledHeight = sequence.height * scale;
-        return {width: scaledWidth, height: scaledHeight};
-    };
-
-    // This function gets the bounding box of the sprite.
-    const getBoundingBox = function() {
-        /* Get the display size of the sprite */
-        const size = getDisplaySize();
-
-        /* Find the box coordinates */
-        const top = y - size.height / 2;
-        const left = x - size.width / 2;
-        const bottom = y + size.height / 2;
-        const right = x + size.width / 2;
-
-        return BoundingBox(ctx, top, left, bottom, right);
-    };
-
-    // This function draws shadow underneath the sprite.
-    const drawShadow = function() {
-        /* Save the settings */
-        ctx.save();
-
-        /* Get the display size of the sprite */
-        const size = getDisplaySize();
-
-        /* Find the scaled width and height of the shadow */
-        const shadowWidth  = size.width * shadowScale.x;
-        const shadowHeight = size.height * shadowScale.y;
-
-        /* Draw a semi-transparent oval */
-        ctx.fillStyle = "black";
-        ctx.globalAlpha = 0.6;
-        ctx.beginPath();
-        ctx.ellipse(x, y + size.height / 2,
-            shadowWidth / 2, shadowHeight / 2, 0, 0, 2 * Math.PI);
-        ctx.fill();
-
-        /* Restore saved settings */
-        ctx.restore();
-    };
-
-    // This function draws the sprite.
-    const drawSprite = function() {
-        /* Save the settings */
-        ctx.save();
-
-        /* Get the display size of the sprite */
-        const size = getDisplaySize();
-
-        /* TODO */
-        /* Draw the sprite image from the sprite sheet */
-        ctx.imageSmoothingEnabled = false;
+    /**
+     * Draw this sprite on the canvas.
+     * @param pos The position of the pivot of the sprite on the canvas.
+     * @param scale The scale of the sprite.
+     */
+    function draw(pos, scale) {
+        ctx.save()
+        ctx.imageSmoothingEnabled = false
+        let sample = sequence[index]
         ctx.drawImage(
             sheet,
-            sequence.x + index * sequence.width,
-            sequence.y,
-            sequence.width,
-            sequence.height,
-            parseInt(x - size.width / 2),
-            parseInt(y - size.height / 2),
-            size.width,
-            size.height);
+            sample.pos.x,
+            sample.pos.y,
+            sample.size.width,
+            sample.size.height,
+            pos.x - sample.pivot.x * scale,
+            pos.y - sample.pivot.y * scale,
+            sample.size.width * scale,
+            sample.size.height * scale
+        )
+        ctx.restore()
+        return this
+    }
 
-        /* Restore saved settings */
-        ctx.restore();
-    };
-
-    // This function draws the shadow and the sprite.
-    const draw = function() {
-        if (isReady()) {
-            drawShadow();
-            drawSprite();
-        }
-        return this;
-    };
-
-    // This function updates the sprite by moving to the next sprite
-    // at appropriate time.
-    // - `time` - The timestamp when this function is called
-    const update = function(time) {
-        if (lastUpdate === 0) lastUpdate = time;
-
-        /* TODO */
-        /* Move to the next sprite when the timing is right */
-        if (time - lastUpdate >= sequence.timing) {
+    /**
+     * Set the sprite sequence.
+     * @param time The current time of the game.
+     * @param pos The position of the pivot of the sprite on the canvas.
+     * @param scale The scale of the sprite.
+     */
+    const update = function (time, pos, scale) {
+        if (lastUpdate === 0) lastUpdate = time
+        let sample = sequence[index]
+        if (time - lastUpdate > sample.timing) {
             ctx.clearRect(
-                sequence.x,
-                sequence.y,
-                sequence.width,
-                sequence.height);
-            drawSprite();
+                sample.pos.x,
+                sample.pos.y,
+                sample.size.width,
+                sample.size.height
+            )
+            draw(pos, scale)
 
-            index++;
-            if (index >= sequence.count) {
-                if (sequence.loop) {
-                    index = 0;
-                } else {
-                    index = sequence.count - 1;
-                }
+            index++
+            if (index === sequence.length) {
+                index = loop ? 0 : sequence.length - 1
             }
-
-            lastUpdate = time;
+            lastUpdate = time
         }
 
-        if ((index < sequence.count - 1) || sequence.loop) {
-            requestAnimationFrame(update);
+        if (index < sequence.length - 1 || loop) {
+            requestAnimationFrame(update)
         }
+        return this
+    }
 
-        return this;
-    };
-
-    // The methods are returned as an object here.
-    return {
-        useSheet: useSheet,
-        getXY: getXY,
-        setXY: setXY,
-        setSequence: setSequence,
-        setScale: setScale,
-        setShadowScale: setShadowScale,
-        getDisplaySize: getDisplaySize,
-        getBoundingBox: getBoundingBox,
-        isReady: isReady,
-        draw: draw,
-        update: update
-    };
-};
+    return { draw, update }
+}

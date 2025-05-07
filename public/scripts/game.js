@@ -24,11 +24,11 @@ const Game = (function() {
 
         // Create players
         if (playerId === 1) {
-            player1 = Player1(context, 150, canvas.height - 50, gameArea, "blue");
-            player2 = Player1(context, canvas.width - 150, canvas.height - 50, gameArea, "red", true); // Remote player
+            player1 = Player(context, 150, canvas.height - 50, gameArea, "spaceShip.png");
+            player2 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "spaceShip.png", true); // Remote player
         } else {
-            player1 = Player1(context, canvas.width - 150, canvas.height - 50, gameArea, "red", true); // Remote player
-            player2 = Player1(context, 150, canvas.height - 50, gameArea, "blue");
+            player1 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "spaceShip.png", true); // Remote player
+            player2 = Player(context, 150, canvas.height - 50, gameArea, "spaceShip.png");
         }
 
         // Set up controls for the local player
