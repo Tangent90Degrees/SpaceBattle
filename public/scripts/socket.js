@@ -106,10 +106,10 @@ const Socket = (function() {
         }
     }
 
-    const updatePlayerPosition = function(player) {
+    const updatePlayerPosition = function(player, playerId) {
         if (socket && socket.connected) {
             const playerData = {
-                playerId: playerId,
+                playerId: playerId, // Use the passed playerId
                 x: player.getBoundingBox().getPoints().topLeft[0],
                 y: player.getBoundingBox().getPoints().topLeft[1]
             };

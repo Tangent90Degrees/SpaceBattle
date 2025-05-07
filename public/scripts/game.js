@@ -110,8 +110,8 @@ const Game = (function() {
     // Update game objects
     const update = function() {
         // Update players
-        Socket.updatePlayerPosition(player1);
-        Socket.updatePlayerPosition(player2);
+        Socket.updatePlayerPosition(player1, 1); // Pass playerId 1 for player1
+        Socket.updatePlayerPosition(player2, 2); // Pass playerId 2 for player2
 
         // Move bullets
         bullets.forEach((bullet, index) => {
@@ -160,6 +160,10 @@ const Game = (function() {
 
     // Start the game loop
     const startGame = function(playerId) {
+        // Hide the online-users-panel and instructions-panel
+        $("#online-users-panel").hide();
+        $("#instructions-panel").hide();
+
         alienSpawnTimer = setInterval(spawnAlien, alienSpawnInterval);
         gameInterval = setInterval(() => {
             update(playerId);
