@@ -18,6 +18,9 @@ const Socket = (function() {
 
             // Get the chatroom messages
             socket.emit("get messages");
+
+            $("#instructions-panel").show();
+            $("#online-users-panel").show();
         });
 
         // Set up the users event
@@ -78,6 +81,8 @@ const Socket = (function() {
     const disconnect = function() {
         socket.disconnect();
         socket = null;
+        $("#instructions-panel").hide();
+        $("#online-users-panel").hide();
     };
 
 
