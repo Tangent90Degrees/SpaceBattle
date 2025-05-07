@@ -175,6 +175,49 @@ const Game = (function() {
     const stopGame = function() {
         clearInterval(gameInterval);
         clearInterval(alienSpawnTimer);
+    
+        // Get the scores for both players
+        const player1Score = player1.getScore();
+        const player2Score = player2.getScore();
+    
+        // Submit Player 1's score
+        fetch("/ranking", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ score: player1Score }),
+        })
+        .then((res) => res.json())
+        .then((json) => {
+            if (json.status === "success") {
+                console.log("Player 1's score submitted successfully:", json.highestScore);
+            } else {
+                console.error("Error submitting Player 1's score:", json.error);
+            }
+        })
+        .catch((err) => {
+            console.error("Error submitting Player 1's score:", err);
+        });
+    
+        // Submit Player 2's score
+        fetch("/ranking", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ score: player2Score }),
+        })
+        .then((res) => res.json())
+        .then((json) => {
+            if (json.status === "success") {
+                console.log("Player 2's score submitted successfully:", json.highestScore);
+            } else {
+                console.error("Error submitting Player 2's score:", json.error);
+            }
+        })
+        .catch((err) => {
+            console.error("Error submitting Player 2's score:", err);
+        });
+    
+        // Show the rankings for Player 1 (you can modify this to show rankings for both players)
+        Ranking.show({ p1Username: player1.username, p1Score: player1Score, p2Username: player2.username, p2Score: player2Score });
     };
 
     return { initialize, startGame, stopGame }; // Expose startGame
