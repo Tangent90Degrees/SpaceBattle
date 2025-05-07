@@ -7,6 +7,12 @@ const Game = (function() {
     const bulletSpeed = 5;
     const alienSpeed = 2;
     let gameArea, gameInterval, alienSpawnTimer;
+    let timerInterval;
+    let remainingTime = 180;
+    let player1Score = 0;
+    let player2Score = 0;
+    let totalScore = 0; // Total score = player1Score + player2Score
+    let gameLives = 5; // Initial number of lives
 
     // Initialize the game
     const initialize = function() {
@@ -84,8 +90,21 @@ const Game = (function() {
             }
         });
 
+        // Initialize game lives display
+        updateGameLivesDisplay();
+
         // Start the game loop
         startGame(playerId);
+    };
+
+    // Update the game lives display
+    const updateGameLivesDisplay = function() {
+        const gameLivesContainer = $("#game-lives");
+        gameLivesContainer.empty(); // Clear existing lives
+
+        for (let i = 0; i < gameLives; i++) {
+            gameLivesContainer.append($("<div class='life-icon'></div>")); // Append life icons
+        }
     };
 
     // Shoot a bullet
@@ -98,6 +117,18 @@ const Game = (function() {
             height: 10,
             color: "yellow",
         });
+    };
+
+    // Decrease a life
+    const loseLife = function() {
+        if (gameLives > 0) {
+            gameLives--;
+            updateGameLivesDisplay();
+
+            if (gameLives === 0) {
+                stopGame(); // End the game if no lives are left
+            }
+        }
     };
 
     // Spawn a new alien
@@ -135,9 +166,23 @@ const Game = (function() {
                     // Remove bullet and alien on collision
                     bullets.splice(bulletIndex, 1);
                     aliens.splice(alienIndex, 1);
+
+                    // Update the scores
+                    if (playerId === 1) {
+                        player1Score += 10;
+                    } else {
+                        player2Score += 10;
+                    }
+                    updateTotalScoreDisplay();
                 }
             });
         });
+    };
+
+    // Update the total score display
+    const updateTotalScoreDisplay = function() {
+        totalScore = player1Score + player2Score; // Calculate total score
+        $("#total-score").text(`Total Score: ${totalScore}`);
     };
 
     // Draw game objects
@@ -164,6 +209,18 @@ const Game = (function() {
         $("#online-users-panel").hide();
         $("#instructions-panel").hide();
 
+        // Show the game canvas, timer, score, and lives
+        $("#game-canvas").show();
+        $("#timer").show();
+        $("#total-score").show();
+        $("#game-lives").show(); // Ensure game lives are shown
+
+        // Initialize game lives display
+        updateGameLivesDisplay();
+
+        // Start the timer
+        startTimer();
+
         alienSpawnTimer = setInterval(spawnAlien, alienSpawnInterval);
         gameInterval = setInterval(() => {
             update(playerId);
@@ -171,10 +228,38 @@ const Game = (function() {
         }, 1000 / 60); // 60 FPS
     };
 
+    // Start the timer
+    const startTimer = function() {
+        remainingTime = 180; // Reset to 3 minutes
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+            remainingTime--;
+            updateTimerDisplay();
+
+            if (remainingTime <= 0) {
+                clearInterval(timerInterval);
+                stopGame(); // Stop the game when the timer reaches 0
+            }
+        }, 1000);
+    };
+
+    // Stop the timer
+    const stopTimer = function() {
+        clearInterval(timerInterval);
+    };
+
+    // Update the timer display
+    const updateTimerDisplay = function() {
+        const minutes = Math.floor(remainingTime / 60).toString().padStart(2, "0");
+        const seconds = (remainingTime % 60).toString().padStart(2, "0");
+        $("#timer").text(`${minutes}:${seconds}`);
+    };
+
     // Stop the game loop
     const stopGame = function() {
         clearInterval(gameInterval);
         clearInterval(alienSpawnTimer);
+        stopTimer();
     
         // Get the scores for both players
         const player1Score = player1.getScore();
@@ -218,7 +303,13 @@ const Game = (function() {
     
         // Show the rankings for Player 1 (you can modify this to show rankings for both players)
         Ranking.show({ p1Username: player1.username, p1Score: player1Score, p2Username: player2.username, p2Score: player2Score });
+
+        // Hide the total score and lives
+        $("#total-score").hide();
+        $("#game-lives").hide();
+
+        alert("Game Over!");
     };
 
-    return { initialize, startGame, stopGame }; // Expose startGame
+    return { initialize, startGame, stopGame, loseLife }; // Expose loseLife for external use
 })();
