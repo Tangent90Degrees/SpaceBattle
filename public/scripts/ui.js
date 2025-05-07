@@ -121,7 +121,23 @@ const UserPanel = (function() {
 
 const OnlineUsersPanel = (function() {
     // This function initializes the UI
-    const initialize = function() {};
+    const initialize = function() {
+        // Hide it
+        $("#instructions-panel").hide();
+        $("#online-users-panel").hide();
+
+        // Click event for the signout button
+        $("#signout-button").on("click", () => {
+            // Send a signout request
+            Authentication.signout(
+                () => {
+                    Socket.disconnect();
+
+                    hide();
+                }
+            );
+        });
+    };
 
     // This function updates the online users panel
     const update = function(onlineUsers) {
@@ -219,16 +235,6 @@ const OnlineUsersPanel = (function() {
         $("#decline-notification-overlay").fadeOut(500);
     });
 
-    // This function shows the online user panel
-    const show = function(user) {
-        $("#online-users-panel").show();
-    };
-
-    // This function hides the online user panel
-    const hide = function() {
-        $("#online-users-panel").fadeOut(500);
-    };
-
     // This function shows the invite overlay
     const showInvite = function(inviter) {
         $("#invite-message").text(`${inviter.name} has invited you to play.`);
@@ -255,13 +261,14 @@ const OnlineUsersPanel = (function() {
             if (countdown <= 0) {
                 clearInterval(interval);
                 $("#countdown-overlay").fadeOut(500);
+                $("#online-users-panel").fadeOut(500);
                 // Transition to the game screen (to be implemented)
                 Game.startGame(playerId);
             }
         }, 1000);
     };
 
-    return { initialize, update, addUser, removeUser, show, hide, showInvite, showDeclineInvite, startCountdown };
+    return { initialize, update, addUser, removeUser, showInvite, showDeclineInvite, startCountdown };
 })();
 
 const UI = (function() {
