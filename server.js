@@ -153,6 +153,36 @@ app.get("/signout", (req, res) => {
     // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
+const rankings = {};
+
+app.get("/ranking", (req, res) => {
+    const username = req.session.user.username;
+    const highestScore = rankings[username];
+
+    const sortedRankings = Object.entries(rankings)
+        .map(([username, score]) => ({ username, score }))
+        .sort((a, b) => b.score - a.score);
+
+    // Sending a success response
+    res.json({ status: "success", highestScore, sortedRankings });
+});
+
+app.post("/ranking", (req, res) => {
+    const username = req.session.user.username;
+    const score = req.body;
+
+    // Update New Highest Score
+    if (!rankings[username]) {
+        rankings[username] = { highestScore: score };
+    }
+    else {
+        rankings[username] = Math.max(rankings[username], score);
+    }
+
+    // Sending a success response
+    res.json({ status: "success" });
+});
+
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const httpServer = createServer(app);
