@@ -261,22 +261,24 @@ class GameManager {
         let canvas = $("#game-canvas").get(0)
         this._context = canvas.getContext("2d")
 
-        this._timer = new Timer(0, 60)
-        this._countDown = new Timer(180, 1, true) // 3 minutes timer
+        this._timer = Timer(0, 60)
+        this._countDown = Timer(180, 1, true) // 3 minutes timer
 
-        let player1Sprite = Sprite(this._context, 'player1.png')
+        let player1Sprite = new Sprite(this._context, 'resources/player1.png')
         this._player1 = new Player(player1Sprite)
     }
 
     start() {
-        this._timer.start(this.update)
-
         this._countDown.start(function (time) {
-                let minutes = Math.floor(time / 60).toString().padStart(2);
-                let seconds = (time % 60).toString().padStart(2);
+                let minutes = Math.floor(time / 60).toString().padStart(2, '0');
+                let seconds = (time % 60).toString().padStart(2, '0');
                 $("#timer").text(`${minutes}:${seconds}`);
             }
         )
+
+        this._timer.start(function (time) {
+            console.log(time);
+        })
     }
 
     update(time) {

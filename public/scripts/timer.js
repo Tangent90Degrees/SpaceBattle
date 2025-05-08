@@ -1,33 +1,26 @@
 /**
  * The timer class is used to create a timer that can be started and stopped.
  */
-class Timer {
+let Timer = function (startTime, frameRate, countDown = false) {
 
-    /**
-     * The constructor of the timer class.
-     * @param start The start time in seconds.
-     * @param frameRate The frame rate of the timer.
-     * @param countDown If true, the timer will count down from the start time.
-     */
-    constructor(start, frameRate, countDown = false) {
-        self._frames = start * frameRate
-        self._frameRate = frameRate
-        self._countDown = countDown
-    }
+    let frames = startTime * frameRate
+    let interval = null
 
     /**
      * Starts the timer.
      * @param update The function to call when the timer is updated.
      */
-    start(update) {
-        self.interval = setInterval(function () {
-            self._frames += self._countDown ? -1 : 1
-            update(self._frames / self._frameRate)
+    function start(update) {
+        interval = setInterval(function () {
+            frames += countDown ? -1 : 1
+            update(frames / frameRate)
 
-            if (self._countDown && self._frames <= 0) {
-                clearInterval(self.interval)
-                self._frames = 0
+            if (countDown && frames <= 0) {
+                clearInterval(interval)
+                frames = 0
             }
-        }, 1000 / self._frameRate)
+        }, 1000 / frameRate)
     }
+
+    return { start }
 }
