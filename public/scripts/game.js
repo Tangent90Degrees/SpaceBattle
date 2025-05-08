@@ -20,87 +20,6 @@ let Game = (function () {
     let totalScore = 0; // Total score = player1Score + player2Score
     let gameLives = 5; // Initial number of lives
 
-    // Initialize the game
-    // const initialize = function () {
-    //     canvas = $("#game-canvas").get(0);
-    //     context = canvas.getContext("2d");
-    //
-    //     // Define the game area
-    //     gameArea = BoundingBox(context, 0, 0, canvas.height, canvas.width);
-    //
-    //     // Create players
-    //     if (playerId === 1) {
-    //         player1 = Player(context, 150, canvas.height - 50, gameArea, "spaceShip.png");
-    //         player2 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "spaceShip.png", true); // Remote player
-    //     } else {
-    //         player1 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "spaceShip.png", true); // Remote player
-    //         player2 = Player(context, 150, canvas.height - 50, gameArea, "spaceShip.png");
-    //     }
-    //
-    //     // Set up controls for the local player
-    //     $(document).on("keydown", function (event) {
-    //         if (playerId === 1) {
-    //             if (event.keyCode === 37)
-    //                 player1.move(1);
-    //             else if (event.keyCode === 38)
-    //                 player1.move(2);
-    //             else if (event.keyCode === 39)
-    //                 player1.move(3);
-    //             else if (event.keyCode === 40)
-    //                 player1.move(4);
-    //             else if (event.keyCode === 32)
-    //                 player1.speedUp();
-    //             else if (event.keyCode === 66)
-    //                 shootBullet(player1);
-    //         } else if (playerId === 2) {
-    //             if (event.keyCode === 37)
-    //                 player2.move(1);
-    //             else if (event.keyCode === 38)
-    //                 player2.move(2);
-    //             else if (event.keyCode === 39)
-    //                 player2.move(3);
-    //             else if (event.keyCode === 40)
-    //                 player2.move(4);
-    //             else if (event.keyCode === 32)
-    //                 player2.speedUp();
-    //             else if (event.keyCode === 66)
-    //                 shootBullet(player2);
-    //         }
-    //     });
-    //
-    //     $(document).on("keyup", function (event) {
-    //         if (playerId === 1) {
-    //             if (event.keyCode === 37)
-    //                 player1.stop(1);
-    //             else if (event.keyCode === 38)
-    //                 player1.stop(2);
-    //             else if (event.keyCode === 39)
-    //                 player1.stop(3);
-    //             else if (event.keyCode === 40)
-    //                 player1.stop(4);
-    //             else if (event.keyCode === 32)
-    //                 player1.slowDown();
-    //         } else if (playerId === 2) {
-    //             if (event.keyCode === 37)
-    //                 player2.stop(1);
-    //             else if (event.keyCode === 38)
-    //                 player2.stop(2);
-    //             else if (event.keyCode === 39)
-    //                 player2.stop(3);
-    //             else if (event.keyCode === 40)
-    //                 player2.stop(4);
-    //             else if (event.keyCode === 32)
-    //                 player2.slowDown();
-    //         }
-    //     });
-    //
-    //     // Initialize game lives display
-    //     updateGameLivesDisplay();
-    //
-    //     // Start the game loop
-    //     startGame(playerId);
-    // };
-
     // Start the game loop
     const startGame = function (playerId) {
         // Initialize game lives display
@@ -335,3 +254,34 @@ let Game = (function () {
 
     return { startGame, stopGame, loseLife, stopTimer, returnToMenu }; // Expose returnToMenu
 })();
+
+
+class GameManager {
+    constructor() {
+        let canvas = $("#game-canvas").get(0)
+        this._context = canvas.getContext("2d")
+
+        this._timer = new Timer(0, 60)
+        this._countDown = new Timer(180, 1, true) // 3 minutes timer
+
+        let player1Sprite = Sprite(this._context, 'player1.png')
+        this._player1 = new Player(player1Sprite)
+    }
+
+    start() {
+        this._timer.start(this.update)
+
+        this._countDown.start(function (time) {
+                let minutes = Math.floor(time / 60).toString().padStart(2);
+                let seconds = (time % 60).toString().padStart(2);
+                $("#timer").text(`${minutes}:${seconds}`);
+            }
+        )
+    }
+
+    update(time) {
+        this._player1.update(time);
+    }
+}
+
+let game = new GameManager

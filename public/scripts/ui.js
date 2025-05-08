@@ -284,7 +284,8 @@ const OnlineUsersPanel = (function () {
                 $("#game-lives").show(); // Ensure game lives are shown
                 $("#returnButton").show();
 
-                Game.startGame(playerId);
+                // Game.startGame(playerId);
+                game.start()
             }
         }, 1000);
     };
