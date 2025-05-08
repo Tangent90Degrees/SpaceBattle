@@ -25,4 +25,8 @@ class ObjectPool {
             obj.update(time, delta)
         })
     }
+
+    render(time) {
+        this._activated.forEach(obj => obj.render(time))
+    }
 }

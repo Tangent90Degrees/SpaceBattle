@@ -10,7 +10,7 @@ class GameObject {
         this.scale = scale
     }
 
-    draw() {
-        this.sprite.draw(this.pos, this.scale)
+    render(time) {
+        this.sprite.update(time, this.pos, this.scale)
     }
 }

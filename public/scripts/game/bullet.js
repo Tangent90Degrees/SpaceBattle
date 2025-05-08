@@ -11,8 +11,8 @@ class Bullet extends GameObject {
         if (this.pos.y < 0 && this.pool) {
             this.pool.release(this)
         }
-        console.log("bullet update")
+        // console.log("bullet update")
 
-        this.sprite.update(time, this.pos, this.scale)
+        // this.sprite.update(time, this.pos, this.scale)
     }
 }

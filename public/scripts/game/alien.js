@@ -5,12 +5,11 @@ class Alien extends GameObject {
         this.direction = { x: 0, y: 0 }
         this.speed = 1
 
-        this.health = 1
+        this.health = 3
     }
 
-    update(time) {
-        this.pos.x += this.direction.x * this.speed
-        this.pos.y += this.direction.y * this.speed
+    update(time, delta) {
+        this.pos.y += this.speed * delta
         this.sprite.update(time, this.pos, this.scale)
     }
 
