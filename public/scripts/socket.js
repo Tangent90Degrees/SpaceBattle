@@ -69,12 +69,18 @@ const Socket = (function() {
                 OnlineUsersPanel.showDeclineInvite();
         });
 
-        socket.on("show new position", (player) => {
-            player = JSON.parse(player);
-            if (playerId == 1 && player.playerId == 2) {
-                player2.setPosition(data.x, data.y);
-            } else if (playerId == 2 && data.playerId == 1) {
-                player1.setPosition(data.x, data.y);
+        socket.on("show new position", (playerData) => {
+            playerData = JSON.parse(playerData);
+            if (playerData.id == 1) {
+                if (playerData.direction == "x")
+                    game._player1.direction.x = playerData.directionChange;
+                else if (playerData.direction == "y")
+                    game._player1.direction.y = playerData.directionChange;
+            } else if (playerData.id == 2) {
+                if (playerData.direction == "x")
+                    game._player2.direction.x = playerData.directionChange;
+                else if (playerData.direction == "y")
+                    game._player2.direction.y = playerData.directionChange;
             }
         });
     };
@@ -113,12 +119,12 @@ const Socket = (function() {
         }
     }
 
-    const updatePlayerPosition = function(player, playerId) {
+    const updatePlayerPosition = function(playerDirection, playerDirectionChange, playerId) {
         if (socket && socket.connected) {
             const playerData = {
-                playerId: playerId, // Use the passed playerId
-                x: player.getBoundingBox().getPoints().topLeft[0],
-                y: player.getBoundingBox().getPoints().topLeft[1]
+                direction: playerDirection,
+                directionChange: playerDirectionChange,
+                id: playerId
             };
             socket.emit("update player position", playerData);
         }
