@@ -9,12 +9,12 @@ class Game {
         this._timer = new Timer(0, Game.FRAME_RATE)
         this._countDown = new Timer(180, 1, true) // 3 minutes timer
 
-        let player1Sprite = new Sprite(this._context, 'resources/player1.png')
-        this._player1 = new Player(player1Sprite, { x: 40, y: 40 }, 0.5)
+        let player1Sprite = new Sprite(this._context, 'resources/player/player1.png')
+        this._player1 = new Player(player1Sprite, { x: 60, y: 120 }, 0.5)
 
-        let playerBulletSprite = new Sprite(this._context, 'resources/invader.png')
+        let playerBulletSprite = new Sprite(this._context, 'resources/player/bullet.png')
         this._playerBullets = new ObjectPool(function (pos) {
-            return new Bullet(playerBulletSprite, pos, 0.25)
+            return new Bullet(playerBulletSprite, pos, 0.5)
         })
         this._player1.bulletPool = this._playerBullets
 
@@ -24,11 +24,12 @@ class Game {
         // })
 
         let enemySprite = new Sprite(this._context, 'resources/enemies/scout.png')
-        this._enemies = new ObjectPool(function (pos) {
-            let enemy = new Alien(enemySprite, pos, 0.5)
-            // enemy.bulletPool = enemyBullets
-            return enemy
-        })
+        // this._enemies = new ObjectPool(function (pos) {
+        //     let enemy = new Alien(enemySprite, pos, 0.5)
+        //     // enemy.bulletPool = enemyBullets
+        //     return enemy
+        // })
+        this._enemies = new EnemySpawner(enemySprite)
 
         let game = this
         $(document).on('keydown', function (event) {
@@ -51,7 +52,6 @@ class Game {
                     break
                 case 32:
                     game._player1.shoot()
-                    game._enemies.get({ x: 40, y: 40 })
             }
         })
 

@@ -1,6 +1,7 @@
 class Alien extends GameObject {
     constructor(sprite, pos = { x: 0, y: 0 }, scale = 1) {
         super(false, sprite, pos, scale)
+        this.collider = new Box(-11, 11, -8, 9)
 
         this.speed = 30
 
@@ -13,7 +14,7 @@ class Alien extends GameObject {
         this.pos.y += this.speed * delta
         this.sprite.update(time, this.pos, this.scale)
 
-        if (this.pos.y > 600 && this.pool) {
+        if (this.pos.y > 180 && this.pool) {
             this.pool.release(this)
         }
     }

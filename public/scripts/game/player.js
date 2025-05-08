@@ -22,6 +22,11 @@ class Player extends GameObject {
     update(time, delta) {
         this.pos.x += this.direction.x * this.speed * delta
         this.pos.y += this.direction.y * this.speed * delta
+
+        this.pos.x = Math.max(this.pos.x, 20)
+        this.pos.x = Math.min(this.pos.x, 280)
+        this.pos.y = Math.max(this.pos.y, 20)
+        this.pos.y = Math.min(this.pos.y, 130)
     }
 
     shoot() {

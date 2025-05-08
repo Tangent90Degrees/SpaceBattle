@@ -78,10 +78,6 @@ class Sprite {
             this._lastUpdate = time
         }
         this.draw(pos, scale)
-
-        // if (this.index < this._samples.length - 1 || this._loop) {
-        //     requestAnimationFrame(this.update)
-        // }
         return this
     }
 }
