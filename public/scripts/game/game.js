@@ -12,9 +12,12 @@ class Game {
         let player1Sprite = new Sprite(this._context, 'resources/player/player1.png')
         this._player1 = new Player(player1Sprite, { x: 60, y: 120 }, 0.5)
 
+        let enemySprite = new Sprite(this._context, 'resources/enemies/scout.png')
+        let enemies = this._enemies = new EnemySpawner(enemySprite, [this._player1])
+
         let playerBulletSprite = new Sprite(this._context, 'resources/player/bullet.png')
         this._playerBullets = new ObjectPool(function (pos) {
-            return new Bullet(playerBulletSprite, pos, 0.5)
+            return new Bullet(playerBulletSprite, pos, 0.5, -1, enemies)
         })
         this._player1.bulletPool = this._playerBullets
 
@@ -22,14 +25,6 @@ class Game {
         // let enemyBullets = this._enemyBullets = new ObjectPool(function (pos) {
         //     return new Bullet(enemyBulletSprite, pos, 0.25)
         // })
-
-        let enemySprite = new Sprite(this._context, 'resources/enemies/scout.png')
-        // this._enemies = new ObjectPool(function (pos) {
-        //     let enemy = new Alien(enemySprite, pos, 0.5)
-        //     // enemy.bulletPool = enemyBullets
-        //     return enemy
-        // })
-        this._enemies = new EnemySpawner(enemySprite)
 
         let game = this
         $(document).on('keydown', function (event) {

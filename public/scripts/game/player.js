@@ -11,6 +11,7 @@ class Player extends GameObject {
      */
     constructor(sprite, pos = { x: 0, y: 0 }, scale = 1) {
         super(true, sprite, pos, scale)
+        this.collider = new Box(-10, 10, -10, 10)
 
         this.direction = { x: 0, y: 0 }
         this.speed = 60

@@ -22,6 +22,10 @@ class ObjectPool {
         console.log("ObjectPool release", obj)
     }
 
+    forEach(callback) {
+        this._activated.forEach(callback)
+    }
+
     update(time, delta) {
         this._activated.forEach(obj => obj.update(time, delta))
     }

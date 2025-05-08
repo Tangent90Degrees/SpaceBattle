@@ -1,8 +1,8 @@
 class EnemySpawner extends GameObject {
-    constructor(sprite) {
+    constructor(sprite, players) {
         super()
         this._pool = new ObjectPool(function (pos) {
-            let enemy = new Alien(sprite, pos, 0.5)
+            let enemy = new Alien(sprite, pos, 0.5, players)
             // enemy.bulletPool = enemyBullets
             return enemy
         })
@@ -18,6 +18,10 @@ class EnemySpawner extends GameObject {
             this.countDown = 2 + 2 * Math.random()
             this.spawn({ x: 20 + Math.random() * 260, y: -20 })
         }
+    }
+
+    forEachEnemy(callback) {
+        this._pool.forEach(callback)
     }
 
     render(time) {
