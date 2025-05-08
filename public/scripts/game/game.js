@@ -1,11 +1,14 @@
-let Game = (function () {
+let Game = function () {
     let canvas = $("#game-canvas").get(0)
     let context = canvas.getContext("2d")
 
     let timer = new Timer(0, 60)
     let countDown = new Timer(180, 1, true) // 3 minutes timer
 
-    let player1, player2;
+    let player1Sprite = new Sprite(context, 'resources/player1.png')
+    let player1 = new Player(player1Sprite)
+
+    let player2;
     let aliens = [];
     let bullets = [];
     const alienSpawnInterval = 2000; // Spawn a new alien every 2 seconds
@@ -21,17 +24,21 @@ let Game = (function () {
     let gameLives = 5; // Initial number of lives
 
     // Start the game loop
-    const startGame = function (playerId) {
+    const start = function (playerId) {
         // Initialize game lives display
         updateGameLivesDisplay();
 
         countDown.start(function (time) {
-                console.log(time)
                 let minutes = Math.floor(time / 60).toString().padStart(2);
                 let seconds = (time % 60).toString().padStart(2);
                 $("#timer").text(`${minutes}:${seconds}`);
             }
         )
+
+        timer.start(function (time) {
+            player1Sprite.update(time, { x: 0, y: 0 }, 10)
+            // player1.update(time)
+        })
     }
 
     // Update the game lives display
@@ -252,20 +259,54 @@ let Game = (function () {
         $("#game-lives").hide(); // Hide the game lives
     };
 
-    return { startGame, stopGame, loseLife, stopTimer, returnToMenu }; // Expose returnToMenu
-})();
-
+    return { start, stopGame, loseLife, stopTimer, returnToMenu } // Expose returnToMenu
+}
 
 class GameManager {
+
+    static FRAME_RATE = 60
+
     constructor() {
-        let canvas = $("#game-canvas").get(0)
-        this._context = canvas.getContext("2d")
+        this._canvas = $("#game-canvas").get(0)
+        this._context = this._canvas.getContext("2d")
 
-        this._timer = Timer(0, 60)
-        this._countDown = Timer(180, 1, true) // 3 minutes timer
+        this._timer = new Timer(0, GameManager.FRAME_RATE)
+        this._countDown = new Timer(180, 1, true) // 3 minutes timer
 
-        let player1Sprite = new Sprite(this._context, 'resources/player1.png')
-        this._player1 = new Player(player1Sprite)
+        this._player1Sprite = new Sprite(this._context, 'resources/player1.png')
+        this._player1 = new Player(this._player1Sprite, { x: 40, y: 40 }, 1)
+
+        let game = this
+        $(document).on('keydown', function (event) {
+            switch (event.keyCode) {
+                case 38:
+                    console.log("Game Over!");
+                    game._player1.direction.y = -1
+                    break
+                case 40:
+                    game._player1.direction.y = 1
+                    break
+                case 37:
+                    game._player1.direction.x = -1
+                    break
+                case 39:
+                    game._player1.direction.x = 1
+                    break
+            }
+        })
+
+        $(document).on('keyup', function (event) {
+            switch (event.keyCode) {
+                case 38:
+                case 40:
+                    game._player1.direction.y = 0
+                    break
+                case 37:
+                case 39:
+                    game._player1.direction.x = 0
+                    break
+            }
+        })
     }
 
     start() {
@@ -276,13 +317,15 @@ class GameManager {
             }
         )
 
+        let game = this
         this._timer.start(function (time) {
-            console.log(time);
+            game.update(time)
         })
     }
 
     update(time) {
-        this._player1.update(time);
+        this._context.clearRect(0, 0, this._canvas.width, this._canvas.height)
+        this._player1.update(time)
     }
 }
 

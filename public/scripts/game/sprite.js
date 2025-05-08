@@ -74,21 +74,14 @@ class Sprite {
     update(time, pos, scale) {
         if (this._lastUpdate === 0) this._lastUpdate = time
         if (time - this._lastUpdate > this.sample.timing) {
-            this._ctx.clearRect(
-                this.sample.pos.x,
-                this.sample.pos.y,
-                this.sample.size.width,
-                this.sample.size.height
-            )
-            this.draw(pos, scale)
-
             this.index++
             this._lastUpdate = time
         }
+        this.draw(pos, scale)
 
-        if (this.index < this._samples.length - 1 || this._loop) {
-            requestAnimationFrame(this.update)
-        }
+        // if (this.index < this._samples.length - 1 || this._loop) {
+        //     requestAnimationFrame(this.update)
+        // }
         return this
     }
 }

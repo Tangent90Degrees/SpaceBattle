@@ -146,8 +146,8 @@
 
 class Player extends GameObject {
 
-    constructor(enabled = true, sprite, pos = { x: 0, y: 0 }, scale = 1) {
-        super(enabled, sprite, pos, scale)
+    constructor(sprite, pos = { x: 0, y: 0 }, scale = 1) {
+        super(true, sprite, pos, scale)
 
         this.direction = { x: 0, y: 0 }
         this.speed = 1
@@ -156,9 +156,8 @@ class Player extends GameObject {
     }
 
     update(time) {
-        super.update(time)
-
         this.pos.x += this.direction.x * this.speed
         this.pos.y += this.direction.y * this.speed
+        this.sprite.update(time, this.pos, this.scale)
     }
 }
