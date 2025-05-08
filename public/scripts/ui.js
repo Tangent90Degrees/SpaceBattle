@@ -22,6 +22,7 @@ const SignInForm = (function () {
                     hide();
                     UserPanel.update(Authentication.getUser());
                     UserPanel.show();
+                    OnlineUsersPanel.show();
 
                     // Play the starting background music
                     Sound.play("startingBackground", true);
@@ -95,17 +96,15 @@ const UserPanel = (function () {
                     // Stop the all background music
                     Sound.stop("startingBackground");
                     Sound.stop("gamingBackground");
-
                     // Stop the timer and hide game elements
-                    Game.stopTimer(); // Stop the timer
+                    //Game.stopTimer(); // Stop the timer
                     $("#timer").hide();
                     $("#total-score").hide();
                     $("#game-lives").hide();
                     $("#game-canvas").hide();
-
                     Socket.disconnect();
-
                     hide();
+                    OnlineUsersPanel.hide();
                     SignInForm.show();
                 }
             );
@@ -142,18 +141,6 @@ const OnlineUsersPanel = (function () {
         // Hide it
         $("#instructions-panel").hide();
         $("#online-users-panel").hide();
-
-        // Click event for the signout button
-        $("#signout-button").on("click", () => {
-            // Send a signout request
-            Authentication.signout(
-                () => {
-                    Socket.disconnect();
-
-                    hide();
-                }
-            );
-        });
     };
 
     // This function updates the online users panel
@@ -178,6 +165,16 @@ const OnlineUsersPanel = (function () {
             }
         }
     };
+
+    const show = function () {
+        $("#instructions-panel").show();
+        $("#online-users-panel").show();
+    };
+
+    const hide = function () {
+        $("#instructions-panel").hide();
+        $("#online-users-panel").hide();
+    }
 
     // This function adds a user in the panel
     const addUser = function (user) {
@@ -289,7 +286,7 @@ const OnlineUsersPanel = (function () {
         }, 1000);
     };
 
-    return { initialize, update, addUser, removeUser, showInvite, showDeclineInvite, startCountdown };
+    return { initialize, update, show, hide, addUser, removeUser, showInvite, showDeclineInvite, startCountdown };
 })();
 
 const UI = (function () {

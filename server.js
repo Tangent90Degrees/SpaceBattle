@@ -133,8 +133,6 @@ app.get("/validate", (req, res) => {
     //
     res.json({ status: "success", user });
 
-    // Delete when appropriate
-    // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
 // Handle the /signout endpoint
@@ -150,8 +148,6 @@ app.get("/signout", (req, res) => {
     //
     res.json({ status: "success" });
 
-    // Delete when appropriate
-    // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
 const rankings = {};

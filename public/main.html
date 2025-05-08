@@ -9,7 +9,7 @@
 <body>
 <div id="start-container" class="col">
     <div id="header" class="row">
-        <div id="title">Space Battle
+        <div id="title">Space Battle: The Alien Alliance
             <span class="material-icons">rocket</span>
         </div>
 
@@ -33,7 +33,7 @@
         <div id="instructions-panel" class="col">
             <div id="instructions-title" class="caption">Instructions</div>
             <div id="instructions-content" class="col">
-                <p>Welcome to Space Battle!</p>
+                <p>Welcome to Space Battle: The Alien Alliance!</p>
                 <ul>
                     <li>Use arrow keys to move your spaceship.</li>
                     <li>Press the "B" button to shoot.</li>
@@ -141,6 +141,7 @@
                 SignInForm.hide();
                 UserPanel.update(Authentication.getUser());
                 UserPanel.show();
+                OnlineUsersPanel.show();
 
                 Socket.connect();
             },
