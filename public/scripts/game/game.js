@@ -274,13 +274,12 @@ class GameManager {
         this._countDown = new Timer(180, 1, true) // 3 minutes timer
 
         this._player1Sprite = new Sprite(this._context, 'resources/player1.png')
-        this._player1 = new Player(this._player1Sprite, { x: 40, y: 40 }, 1)
+        this._player1 = new Player(this._player1Sprite, { x: 40, y: 40 }, 0.5)
 
         let game = this
         $(document).on('keydown', function (event) {
             switch (event.keyCode) {
                 case 38:
-                    console.log("Game Over!");
                     game._player1.direction.y = -1
                     break
                 case 40:
@@ -318,14 +317,14 @@ class GameManager {
         )
 
         let game = this
-        this._timer.start(function (time) {
-            game.update(time)
+        this._timer.start(function (time, delta) {
+            game.update(time, delta)
         })
     }
 
-    update(time) {
+    update(time, delta) {
         this._context.clearRect(0, 0, this._canvas.width, this._canvas.height)
-        this._player1.update(time)
+        this._player1.update(time, delta)
     }
 }
 

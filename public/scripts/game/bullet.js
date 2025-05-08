@@ -1,8 +1,6 @@
 class Bullet extends GameObject {
-    constructor(sprite, objectPos = { x: 0, y: 0 }, scale = 1) {
-        super(true, sprite, { x: objectPos.x, y: objectPos.y }, scale); // Set bullet position to player's position
-
-        this.direction = { x: 0, y: 0 }
+    constructor(sprite, pos = { x: 0, y: 0 }, scale = 1) {
+        super(false, sprite, pos, scale); // Set bullet position to player's position
         this.speed = 10;
     }
 

@@ -13,7 +13,7 @@ class Timer {
         let timer = this
         this._interval = setInterval(function () {
             timer._frames += timer._countDown ? -1 : 1
-            update(timer._frames / timer._frameRate, 1 / this._frameRate)
+            update(timer._frames / timer._frameRate, 1 / timer._frameRate)
 
             if (timer._countDown && timer._frames <= 0) {
                 clearInterval(timer._interval)
