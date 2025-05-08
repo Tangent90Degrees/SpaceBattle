@@ -1,12 +1,18 @@
-const Game = (function() {
-    let canvas, context;
+let Game = (function () {
+    let canvas = $("#game-canvas").get(0)
+    let context = canvas.getContext("2d")
+
+    let timer = new Timer(0, 60)
+    let countDown = new Timer(180, 1, true) // 3 minutes timer
+
     let player1, player2;
     let aliens = [];
     let bullets = [];
     const alienSpawnInterval = 2000; // Spawn a new alien every 2 seconds
     const bulletSpeed = 5;
     const alienSpeed = 2;
-    let gameArea, gameInterval, alienSpawnTimer;
+
+    let gameInterval, alienSpawnTimer;
     let timerInterval;
     let remainingTime = 180;
     let player1Score = 0;
@@ -15,90 +21,102 @@ const Game = (function() {
     let gameLives = 5; // Initial number of lives
 
     // Initialize the game
-    const initialize = function() {
-        canvas = $("#game-canvas").get(0);
-        context = canvas.getContext("2d");
+    // const initialize = function () {
+    //     canvas = $("#game-canvas").get(0);
+    //     context = canvas.getContext("2d");
+    //
+    //     // Define the game area
+    //     gameArea = BoundingBox(context, 0, 0, canvas.height, canvas.width);
+    //
+    //     // Create players
+    //     if (playerId === 1) {
+    //         player1 = Player(context, 150, canvas.height - 50, gameArea, "spaceShip.png");
+    //         player2 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "spaceShip.png", true); // Remote player
+    //     } else {
+    //         player1 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "spaceShip.png", true); // Remote player
+    //         player2 = Player(context, 150, canvas.height - 50, gameArea, "spaceShip.png");
+    //     }
+    //
+    //     // Set up controls for the local player
+    //     $(document).on("keydown", function (event) {
+    //         if (playerId === 1) {
+    //             if (event.keyCode === 37)
+    //                 player1.move(1);
+    //             else if (event.keyCode === 38)
+    //                 player1.move(2);
+    //             else if (event.keyCode === 39)
+    //                 player1.move(3);
+    //             else if (event.keyCode === 40)
+    //                 player1.move(4);
+    //             else if (event.keyCode === 32)
+    //                 player1.speedUp();
+    //             else if (event.keyCode === 66)
+    //                 shootBullet(player1);
+    //         } else if (playerId === 2) {
+    //             if (event.keyCode === 37)
+    //                 player2.move(1);
+    //             else if (event.keyCode === 38)
+    //                 player2.move(2);
+    //             else if (event.keyCode === 39)
+    //                 player2.move(3);
+    //             else if (event.keyCode === 40)
+    //                 player2.move(4);
+    //             else if (event.keyCode === 32)
+    //                 player2.speedUp();
+    //             else if (event.keyCode === 66)
+    //                 shootBullet(player2);
+    //         }
+    //     });
+    //
+    //     $(document).on("keyup", function (event) {
+    //         if (playerId === 1) {
+    //             if (event.keyCode === 37)
+    //                 player1.stop(1);
+    //             else if (event.keyCode === 38)
+    //                 player1.stop(2);
+    //             else if (event.keyCode === 39)
+    //                 player1.stop(3);
+    //             else if (event.keyCode === 40)
+    //                 player1.stop(4);
+    //             else if (event.keyCode === 32)
+    //                 player1.slowDown();
+    //         } else if (playerId === 2) {
+    //             if (event.keyCode === 37)
+    //                 player2.stop(1);
+    //             else if (event.keyCode === 38)
+    //                 player2.stop(2);
+    //             else if (event.keyCode === 39)
+    //                 player2.stop(3);
+    //             else if (event.keyCode === 40)
+    //                 player2.stop(4);
+    //             else if (event.keyCode === 32)
+    //                 player2.slowDown();
+    //         }
+    //     });
+    //
+    //     // Initialize game lives display
+    //     updateGameLivesDisplay();
+    //
+    //     // Start the game loop
+    //     startGame(playerId);
+    // };
 
-        // Define the game area
-        gameArea = BoundingBox(context, 0, 0, canvas.height, canvas.width);
-
-        // Create players
-        if (playerId === 1) {
-            player1 = Player(context, 150, canvas.height - 50, gameArea, "spaceShip.png");
-            player2 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "spaceShip.png", true); // Remote player
-        } else {
-            player1 = Player(context, canvas.width - 150, canvas.height - 50, gameArea, "spaceShip.png", true); // Remote player
-            player2 = Player(context, 150, canvas.height - 50, gameArea, "spaceShip.png");
-        }
-
-        // Set up controls for the local player
-        $(document).on("keydown", function(event) {
-            if (playerId === 1) {
-                if (event.keyCode === 37)
-                    player1.move(1);
-                else if (event.keyCode === 38)
-                    player1.move(2);
-                else if (event.keyCode === 39)
-                    player1.move(3);
-                else if (event.keyCode === 40)
-                    player1.move(4);
-                else if (event.keyCode === 32)
-                    player1.speedUp();
-                else if (event.keyCode === 66)
-                    shootBullet(player1);
-            }
-            else if (playerId === 2) {
-                if (event.keyCode === 37)
-                    player2.move(1);
-                else if (event.keyCode === 38)
-                    player2.move(2);
-                else if (event.keyCode === 39)
-                    player2.move(3);
-                else if (event.keyCode === 40)
-                    player2.move(4);
-                else if (event.keyCode === 32)
-                    player2.speedUp();
-                else if (event.keyCode === 66)
-                    shootBullet(player2);
-            }
-        });
-
-        $(document).on("keyup", function(event) {
-            if (playerId === 1) {
-                if (event.keyCode === 37)
-                    player1.stop(1);
-                else if (event.keyCode === 38)
-                    player1.stop(2);
-                else if (event.keyCode === 39)
-                    player1.stop(3);
-                else if (event.keyCode === 40)
-                    player1.stop(4);
-                else if (event.keyCode === 32)
-                    player1.slowDown();
-            }
-            else if (playerId === 2) {
-                if (event.keyCode === 37)
-                    player2.stop(1);
-                else if (event.keyCode === 38)
-                    player2.stop(2);
-                else if (event.keyCode === 39)
-                    player2.stop(3);
-                else if (event.keyCode === 40)
-                    player2.stop(4);
-                else if (event.keyCode === 32)
-                    player2.slowDown();
-            }
-        });
-
+    // Start the game loop
+    const startGame = function (playerId) {
         // Initialize game lives display
         updateGameLivesDisplay();
 
-        // Start the game loop
-        startGame(playerId);
-    };
+        countDown.start(function (time) {
+                console.log(time)
+                let minutes = Math.floor(time / 60).toString().padStart(2);
+                let seconds = (time % 60).toString().padStart(2);
+                $("#timer").text(`${minutes}:${seconds}`);
+            }
+        )
+    }
 
     // Update the game lives display
-    const updateGameLivesDisplay = function() {
+    const updateGameLivesDisplay = function () {
         const gameLivesContainer = $("#game-lives");
         gameLivesContainer.empty(); // Clear existing lives
 
@@ -108,14 +126,14 @@ const Game = (function() {
     };
 
     // Shoot a bullet
-    const shootBullet = function(player) {
+    const shootBullet = function (player) {
         const { x, y } = player.getBoundingBox().getPoints().topRight;
         bullets.push({
-            x: x - 2.5,
-            y: y,
-            width: 5,
+            x:      x - 2.5,
+            y:      y,
+            width:  5,
             height: 10,
-            color: "yellow",
+            color:  "yellow",
         });
 
         // Play shooting sound
@@ -123,7 +141,7 @@ const Game = (function() {
     };
 
     // Decrease a life
-    const loseLife = function() {
+    const loseLife = function () {
         if (gameLives > 0) {
             gameLives--;
             updateGameLivesDisplay();
@@ -135,14 +153,14 @@ const Game = (function() {
     };
 
     // Spawn a new alien
-    const spawnAlien = function() {
+    const spawnAlien = function () {
         const x = Math.random() * (canvas.width - 30);
         const alien = Alien(context, x, 0, "green");
         aliens.push(alien);
     };
 
     // Update game objects
-    const update = function() {
+    const update = function () {
         // Update players
         Socket.updatePlayerPosition(player1, 1); // Pass playerId 1 for player1
         Socket.updatePlayerPosition(player2, 2); // Pass playerId 2 for player2
@@ -186,13 +204,13 @@ const Game = (function() {
     };
 
     // Update the total score display
-    const updateTotalScoreDisplay = function() {
+    const updateTotalScoreDisplay = function () {
         totalScore = player1Score + player2Score; // Calculate total score
         $("#total-score").text(`Total Score: ${totalScore}`);
     };
 
     // Draw game objects
-    const draw = function() {
+    const draw = function () {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         // Draw players
@@ -209,40 +227,8 @@ const Game = (function() {
         aliens.forEach((alien) => alien.draw());
     };
 
-    // Start the game loop
-    const startGame = function(playerId) {
-        // Stop the starting background music
-        Sound.stop("startingBackground");
-
-        // Play the gaming background music
-        Sound.play("gamingBackground");
-
-        // Hide the online-users-panel and instructions-panel
-        $("#online-users-panel").hide();
-        $("#instructions-panel").hide();
-
-        // Show the game canvas, timer, score, and lives
-        $("#game-canvas").show();
-        $("#timer").show();
-        $("#total-score").show();
-        $("#game-lives").show(); // Ensure game lives are shown
-        $("#returnButton").show();
-
-        // Initialize game lives display
-        updateGameLivesDisplay();
-
-        // Start the timer
-        startTimer();
-
-        alienSpawnTimer = setInterval(spawnAlien, alienSpawnInterval);
-        gameInterval = setInterval(() => {
-            update(playerId);
-            draw();
-        }, 1000 / 60); // 60 FPS
-    };
-
     // Start the timer
-    const startTimer = function() {
+    const startTimer = function () {
         remainingTime = 180; // Reset to 3 minutes
         updateTimerDisplay();
         timerInterval = setInterval(() => {
@@ -257,19 +243,19 @@ const Game = (function() {
     };
 
     // Stop the timer
-    const stopTimer = function() {
+    const stopTimer = function () {
         clearInterval(timerInterval);
     };
 
     // Update the timer display
-    const updateTimerDisplay = function() {
+    const updateTimerDisplay = function () {
         const minutes = Math.floor(remainingTime / 60).toString().padStart(2, "0");
         const seconds = (remainingTime % 60).toString().padStart(2, "0");
         $("#timer").text(`${minutes}:${seconds}`);
     };
 
     // Stop the game loop
-    const stopGame = function() {
+    const stopGame = function () {
         clearInterval(gameInterval);
         clearInterval(alienSpawnTimer);
         stopTimer();
@@ -283,9 +269,9 @@ const Game = (function() {
 
         // Submit Player 1's score
         fetch("/ranking", {
-            method: "POST",
+            method:  "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ score: player1Score }),
+            body:    JSON.stringify({ score: player1Score }),
         })
             .then((res) => res.json())
             .then((json) => {
@@ -301,9 +287,9 @@ const Game = (function() {
 
         // Submit Player 2's score
         fetch("/ranking", {
-            method: "POST",
+            method:  "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ score: player2Score }),
+            body:    JSON.stringify({ score: player2Score }),
         })
             .then((res) => res.json())
             .then((json) => {
@@ -318,7 +304,12 @@ const Game = (function() {
             });
 
         // Show the rankings for Player 1 (you can modify this to show rankings for both players)
-        Ranking.show({ p1Username: player1.username, p1Score: player1Score, p2Username: player2.username, p2Score: player2Score });
+        Ranking.show({
+            p1Username: player1.username,
+            p1Score:    player1Score,
+            p2Username: player2.username,
+            p2Score:    player2Score
+        });
 
         // Hide the game elements
         $("#total-score").hide();
@@ -331,7 +322,7 @@ const Game = (function() {
     };
 
     // Stop the game and return to the menu
-    const returnToMenu = function() {
+    const returnToMenu = function () {
         stopTimer();
         $("#online-users-panel").show(); // Show the online players panel
         $("#instructions-panel").show(); // Show the instructions panel
@@ -342,5 +333,5 @@ const Game = (function() {
         $("#game-lives").hide(); // Hide the game lives
     };
 
-    return { initialize, startGame, stopGame, loseLife, stopTimer, returnToMenu }; // Expose returnToMenu
+    return { startGame, stopGame, loseLife, stopTimer, returnToMenu }; // Expose returnToMenu
 })();

@@ -146,18 +146,10 @@
 
 class Player extends GameObject {
 
-    static Direction = {
-        NONE:  0,
-        LEFT:  1,
-        UP:    2,
-        RIGHT: 3,
-        DOWN:  4
-    }
-
     constructor(enabled = true, sprite, pos = { x: 0, y: 0 }, scale = 1) {
         super(enabled, sprite, pos, scale)
 
-        this.direction = Player.Direction.NONE
+        this.direction = { x: 0, y: 0 }
         this.speed = 1
 
         this.health = 3
@@ -166,19 +158,7 @@ class Player extends GameObject {
     update(time) {
         super.update(time)
 
-        switch (this.direction) {
-            case Player.Direction.LEFT:
-                this.pos.x -= this.speed
-                break
-            case Player.Direction.UP:
-                this.pos.y -= this.speed
-                break
-            case Player.Direction.RIGHT:
-                this.pos.x += this.speed
-                break
-            case Player.Direction.DOWN:
-                this.pos.y += this.speed
-                break
-        }
+        this.pos.x += this.direction.x * this.speed
+        this.pos.y += this.direction.y * this.speed
     }
 }

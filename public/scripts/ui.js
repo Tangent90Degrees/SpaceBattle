@@ -1,6 +1,6 @@
-const SignInForm = (function() {
+const SignInForm = (function () {
     // This function initializes the UI
-    const initialize = function() {
+    const initialize = function () {
         // Populate the avatar selection
         Avatar.populate($("#register-avatar"));
 
@@ -28,7 +28,9 @@ const SignInForm = (function() {
 
                     Socket.connect();
                 },
-                (error) => { $("#signin-message").text(error); }
+                (error) => {
+                    $("#signin-message").text(error);
+                }
             );
         });
 
@@ -39,13 +41,13 @@ const SignInForm = (function() {
 
             // Get the input fields
             const username = $("#register-username").val().trim();
-            const avatar   = $("#register-avatar").val();
-            const name     = $("#register-name").val().trim();
+            const avatar = $("#register-avatar").val();
+            const name = $("#register-name").val().trim();
             const password = $("#register-password").val().trim();
             const confirmPassword = $("#register-confirm").val().trim();
 
             // Password and confirmation does not match
-            if (password != confirmPassword) {
+            if (password !== confirmPassword) {
                 $("#register-message").text("Passwords do not match.");
                 return;
             }
@@ -56,18 +58,20 @@ const SignInForm = (function() {
                     $("#register-form").get(0).reset();
                     $("#register-message").text("You can sign in now.");
                 },
-                (error) => { $("#register-message").text(error); }
+                (error) => {
+                    $("#register-message").text(error);
+                }
             );
         });
     };
 
     // This function shows the form
-    const show = function() {
+    const show = function () {
         $("#signin-overlay").fadeIn(500);
     };
 
     // This function hides the form
-    const hide = function() {
+    const hide = function () {
         $("#signin-form").get(0).reset();
         $("#signin-message").text("");
         $("#register-message").text("");
@@ -77,9 +81,9 @@ const SignInForm = (function() {
     return { initialize, show, hide };
 })();
 
-const UserPanel = (function() {
+const UserPanel = (function () {
     // This function initializes the UI
-    const initialize = function() {
+    const initialize = function () {
         // Hide it
         $("#user-panel").hide();
 
@@ -109,22 +113,21 @@ const UserPanel = (function() {
     };
 
     // This function shows the form with the user
-    const show = function(user) {
+    const show = function (user) {
         $("#user-panel").show();
     };
 
     // This function hides the form
-    const hide = function() {
+    const hide = function () {
         $("#user-panel").hide();
     };
 
     // This function updates the user panel
-    const update = function(user) {
+    const update = function (user) {
         if (user) {
             $("#user-panel .user-avatar").html(Avatar.getCode(user.avatar));
             $("#user-panel .user-name").text(user.name);
-        }
-        else {
+        } else {
             $("#user-panel .user-avatar").html("");
             $("#user-panel .user-name").text("");
         }
@@ -133,9 +136,9 @@ const UserPanel = (function() {
     return { initialize, show, hide, update };
 })();
 
-const OnlineUsersPanel = (function() {
+const OnlineUsersPanel = (function () {
     // This function initializes the UI
-    const initialize = function() {
+    const initialize = function () {
         // Hide it
         $("#instructions-panel").hide();
         $("#online-users-panel").hide();
@@ -154,7 +157,7 @@ const OnlineUsersPanel = (function() {
     };
 
     // This function updates the online users panel
-    const update = function(onlineUsers) {
+    const update = function (onlineUsers) {
         const onlineUsersArea = $("#online-users-area");
 
         // Clear the online users area
@@ -177,7 +180,7 @@ const OnlineUsersPanel = (function() {
     };
 
     // This function adds a user in the panel
-    const addUser = function(user) {
+    const addUser = function (user) {
         const onlineUsersArea = $("#online-users-area");
 
         // Find the user
@@ -195,7 +198,7 @@ const OnlineUsersPanel = (function() {
     };
 
     // This function removes a user from the panel
-    const removeUser = function(user) {
+    const removeUser = function (user) {
         const onlineUsersArea = $("#online-users-area");
 
         // Find the user
@@ -205,7 +208,7 @@ const OnlineUsersPanel = (function() {
         if (userDiv.length > 0) userDiv.remove();
     };
 
-    $(document).on("click", ".invite-button", function() {
+    $(document).on("click", ".invite-button", function () {
         const invitee = $(this).data("user");
         const inviter = Authentication.getUser(); // Get the current user as the inviter
         if (inviter) {
@@ -217,7 +220,7 @@ const OnlineUsersPanel = (function() {
     });
 
     // Handle accept button click
-    $(document).on("click", "#accept-invite", function() {
+    $(document).on("click", "#accept-invite", function () {
         const inviter = $(this).data("inviter");
         Socket.acceptInvite(inviter);
         $("#invite-overlay").hide();
@@ -225,18 +228,18 @@ const OnlineUsersPanel = (function() {
     });
 
     // Handle decline button click
-    $(document).on("click", "#decline-invite", function() {
+    $(document).on("click", "#decline-invite", function () {
         const inviter = $(this).data("inviter");
         Socket.declineInvite(inviter);
         $("#invite-overlay").hide();
     });
 
-    $(document).on("click", "#decline-notification-ok", function() {
+    $(document).on("click", "#decline-notification-ok", function () {
         $("#decline-notification-overlay").fadeOut(500);
     });
 
     // This function shows the invite overlay
-    const showInvite = function(inviter) {
+    const showInvite = function (inviter) {
         $("#invite-message").text(`${inviter.name} has invited you to play.`);
         $("#accept-invite").data("inviter", inviter);
         $("#decline-invite").data("inviter", inviter);
@@ -244,12 +247,12 @@ const OnlineUsersPanel = (function() {
     };
 
     // This function shows the decline invite overlay
-    const showDeclineInvite = function() {
+    const showDeclineInvite = function () {
         $("#decline-notification-overlay").fadeIn(500);
     }
 
     // This function starts the countdown before the game
-    const startCountdown = function(playerId) {
+    const startCountdown = function (playerId) {
         let countdown = 5;
         $("#countdown").text(countdown);
         $("#countdown-overlay").fadeIn(500);
@@ -263,6 +266,24 @@ const OnlineUsersPanel = (function() {
                 $("#countdown-overlay").fadeOut(500);
                 $("#online-users-panel").fadeOut(500);
                 // Transition to the game screen (to be implemented)
+
+                // Stop the starting background music
+                Sound.stop("startingBackground");
+
+                // Play the gaming background music
+                Sound.play("gamingBackground");
+
+                // Hide the online-users-panel and instructions-panel
+                $("#online-users-panel").hide();
+                $("#instructions-panel").hide();
+
+                // Show the game canvas, timer, score, and lives
+                $("#game-canvas").show();
+                $("#timer").show();
+                $("#total-score").show();
+                $("#game-lives").show(); // Ensure game lives are shown
+                $("#returnButton").show();
+
                 Game.startGame(playerId);
             }
         }, 1000);
@@ -271,9 +292,9 @@ const OnlineUsersPanel = (function() {
     return { initialize, update, addUser, removeUser, showInvite, showDeclineInvite, startCountdown };
 })();
 
-const UI = (function() {
+const UI = (function () {
     // This function gets the user display
-    const getUserDisplay = function(user) {
+    const getUserDisplay = function (user) {
         return $("<div class='field-content row shadow'></div>")
             .append($("<span class='user-avatar'>" +
                 Avatar.getCode(user.avatar) + "</span>"))
@@ -284,7 +305,7 @@ const UI = (function() {
     const components = [SignInForm, UserPanel, OnlineUsersPanel];
 
     // This function initializes the UI
-    const initialize = function() {
+    const initialize = function () {
         // Initialize the components
         for (const component of components) {
             component.initialize();

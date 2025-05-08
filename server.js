@@ -1,11 +1,11 @@
-const express = require("express");
+const express = require('express')
 
-const bcrypt = require("bcrypt");
-const fs = require("fs");
+const bcrypt = require('bcrypt');
+let fs = require('fs')
 const session = require("express-session");
 
 // Create the Express app
-const app = express();
+const app = express()
 
 // Use the 'public' folder to serve static files
 app.use(express.static("public"));
@@ -15,11 +15,11 @@ app.use(express.json());
 
 // Use the session middleware to maintain sessions
 const chatSession = session({
-    secret: "game",
-    resave: false,
+    secret:            "game",
+    resave:            false,
     saveUninitialized: false,
-    rolling: true,
-    cookie: { maxAge: 300000 }
+    rolling:           true,
+    cookie:            { maxAge: 300000 }
 });
 app.use(chatSession);
 
@@ -78,6 +78,7 @@ app.post("/register", (req, res) => {
     // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
+
 // Handle the /signin endpoint
 app.post("/signin", (req, res) => {
     // Get the JSON data from the body
@@ -110,7 +111,7 @@ app.post("/signin", (req, res) => {
     //
     req.session.user = { username, avatar: users[username].avatar, name: users[username].name };
     res.json({ status: "success", user: { username, avatar: users[username].avatar, name: users[username].name } });
-    
+
     // Delete when appropriate
     // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
@@ -131,7 +132,7 @@ app.get("/validate", (req, res) => {
     // D. Sending a success response with the user account
     //
     res.json({ status: "success", user });
- 
+
     // Delete when appropriate
     // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
@@ -148,7 +149,7 @@ app.get("/signout", (req, res) => {
     // Sending a success response
     //
     res.json({ status: "success" });
- 
+
     // Delete when appropriate
     // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
@@ -174,8 +175,7 @@ app.post("/ranking", (req, res) => {
     // Update New Highest Score
     if (!rankings[username]) {
         rankings[username] = { highestScore: score };
-    }
-    else {
+    } else {
         rankings[username] = Math.max(rankings[username], score);
     }
 
@@ -183,7 +183,7 @@ app.post("/ranking", (req, res) => {
     res.json({ status: "success" });
 });
 
-const { createServer } = require("http");
+const { createServer } = require('http');
 const { Server } = require("socket.io");
 const httpServer = createServer(app);
 const io = new Server(httpServer);
