@@ -24,7 +24,7 @@ const SignInForm = (function () {
                     UserPanel.show();
 
                     // Play the starting background music
-                    Sound.play("startingBackground");
+                    Sound.play("startingBackground", true);
 
                     Socket.connect();
                 },
@@ -270,8 +270,8 @@ const OnlineUsersPanel = (function () {
                 // Stop the starting background music
                 Sound.stop("startingBackground");
 
-                // Play the gaming background music
-                Sound.play("gamingBackground");
+                // Play the gaming background music infinitely
+                Sound.play("gamingBackground", true); // Enable looping
 
                 // Hide the online-users-panel and instructions-panel
                 $("#online-users-panel").hide();

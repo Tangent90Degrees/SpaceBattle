@@ -7,9 +7,10 @@ const Sound = (function() {
     };
 
     // Play a sound
-    const play = function(name) {
+    const play = function(name, loop = false) {
         if (sounds[name]) {
             sounds[name].currentTime = 0; // Reset to the start
+            sounds[name].loop = loop; // Enable or disable looping
             sounds[name].play().catch((error) => {
                 console.error(`Failed to play sound "${name}":`, error);
             });
@@ -28,8 +29,16 @@ const Sound = (function() {
         if (sounds[name]) {
             sounds[name].pause();
             sounds[name].currentTime = 0; // Reset to the start
+            sounds[name].loop = false; // Disable looping when stopped
         }
     };
 
-    return { load, play, pause, stop };
+    // Enable or disable looping for a sound
+    const loop = function(name, shouldLoop) {
+        if (sounds[name]) {
+            sounds[name].loop = shouldLoop;
+        }
+    };
+
+    return { load, play, pause, stop, loop };
 })();
