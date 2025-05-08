@@ -225,9 +225,9 @@ io.on("connection", (socket) => {
         io.emit("show decline invite", JSON.stringify(inviter));
     });
 
-    socket.on("update player position", (player) => {
+    socket.on("update player position", (playerData) => {
         // Send the new position to the user
-        io.emit("show new position", JSON.stringify(player));
+        io.emit("show new position", JSON.stringify(playerData));
     });
 
     // Handle user login
