@@ -1,12 +1,18 @@
 class Bullet extends GameObject {
-    constructor(sprite, pos = { x: 0, y: 0 }, scale = 1) {
-        super(false, sprite, pos, scale); // Set bullet position to player's position
-        this.speed = 10;
+    constructor(sprite, pos, scale = 1, pool = null) {
+        super(false, sprite, pos, scale)
+        this.pool = null
+        this.speed = 200
     }
 
-    update(time) {
-        this.pos.x += this.direction.x * this.speed;
-        this.pos.y += this.direction.y * this.speed;
-        this.sprite.update(time, this.pos, this.scale);
+    update(time, delta) {
+        this.pos.y -= this.speed * delta
+
+        if (this.pos.y < 0 && this.pool) {
+            this.pool.release(this)
+        }
+        console.log("bullet update")
+
+        this.sprite.update(time, this.pos, this.scale)
     }
 }

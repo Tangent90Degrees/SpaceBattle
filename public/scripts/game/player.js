@@ -153,6 +153,7 @@ class Player extends GameObject {
         this.speed = 60
 
         this.health = 3
+        this.bulletPool = null
     }
 
     update(time, delta) {
@@ -161,8 +162,8 @@ class Player extends GameObject {
         this.sprite.update(time, this.pos, this.scale)
     }
 
-    shoot(sprite, bulletScale = 1) {
-        return new Bullet(sprite, { x: this.pos.x, y: this.pos.y }, bulletScale); // Create a bullet at the player's position
+    shoot() {
+        return this.bulletPool.get({ ...this.pos })
     }
 }
 
