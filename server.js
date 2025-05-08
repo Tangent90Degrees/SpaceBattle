@@ -133,8 +133,6 @@ app.get("/validate", (req, res) => {
     //
     res.json({ status: "success", user });
 
-    // Delete when appropriate
-    // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
 // Handle the /signout endpoint
@@ -150,8 +148,6 @@ app.get("/signout", (req, res) => {
     //
     res.json({ status: "success" });
 
-    // Delete when appropriate
-    // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
 const rankings = {};
@@ -240,10 +236,11 @@ io.on("connection", (socket) => {
 
     // Handle user logout
     socket.on("disconnect", () => {
-        if (user && onlineUsers[user.username]) {
+        if (user) {
             delete onlineUsers[user.username];
 
             // Broadcast the updated list of online users
+            io.emit("users", JSON.stringify(onlineUsers));
             io.emit("remove user", JSON.stringify({ username: user.username, avatar: user.avatar, name: user.name }));
         }
     });
