@@ -9,11 +9,19 @@ class Alien extends GameObject {
         this.health = 3
         this.bulletPool = null
         this.players = players
+
+        this._nextShootRemaining = 0
     }
 
     update(time, delta) {
         this.pos.y += this.speed * delta
         this.sprite.update(time, this.pos, this.scale)
+
+        this._nextShootRemaining -= delta
+        if (this._nextShootRemaining < 0) {
+            this._nextShootRemaining = 1
+            this.shoot()
+        }
 
         if (this.pos.y > 180 && this.pool) {
             this.health = 3
@@ -37,7 +45,10 @@ class Alien extends GameObject {
         })
     }
 
-    shoot(sprite, bulletScale = 1) {
-        return new Bullet(sprite, { x: this.pos.x, y: this.pos.y }, bulletScale); // Create a bullet at the player's position
+    shoot() {
+        let left = this.bulletPool.get({ ...this.pos })
+        left.direction = { x: -0.5, y: 1 }
+        let right = this.bulletPool.get({ ...this.pos })
+        right.direction = { x: 0.5, y: 1 }
     }
 }

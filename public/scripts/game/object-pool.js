@@ -12,6 +12,7 @@ class ObjectPool {
         obj.enabled = true
         this._activated.push(obj)
         console.log("ObjectPool get", obj)
+        return obj
     }
 
     release(obj) {
