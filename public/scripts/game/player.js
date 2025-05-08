@@ -22,7 +22,6 @@ class Player extends GameObject {
     update(time, delta) {
         this.pos.x += this.direction.x * this.speed * delta
         this.pos.y += this.direction.y * this.speed * delta
-        // this.sprite.update(time, this.pos, this.scale)
     }
 
     shoot() {

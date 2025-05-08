@@ -1,4 +1,3 @@
-
 class Game {
 
     static FRAME_RATE = 60
@@ -10,16 +9,26 @@ class Game {
         this._timer = new Timer(0, Game.FRAME_RATE)
         this._countDown = new Timer(180, 1, true) // 3 minutes timer
 
-        this._player1Sprite = new Sprite(this._context, 'resources/player1.png')
-        this._player1 = new Player(this._player1Sprite, { x: 40, y: 40 }, 0.5)
+        let player1Sprite = new Sprite(this._context, 'resources/player1.png')
+        this._player1 = new Player(player1Sprite, { x: 40, y: 40 }, 0.5)
 
         let playerBulletSprite = new Sprite(this._context, 'resources/invader.png')
-        // let playerBulletPrefab = new Bullet(playerBulletSprite, { x: 40, y: 40 }, 0.25)
-        this._playerBullets = new ObjectPool(function () {
-            return new Bullet(playerBulletSprite, { x: 40, y: 40 }, 0.25)
+        this._playerBullets = new ObjectPool(function (pos) {
+            return new Bullet(playerBulletSprite, pos, 0.25)
         })
-
         this._player1.bulletPool = this._playerBullets
+
+        // let enemyBulletSprite = new Sprite(this._context, 'resources/invader.png')
+        // let enemyBullets = this._enemyBullets = new ObjectPool(function (pos) {
+        //     return new Bullet(enemyBulletSprite, pos, 0.25)
+        // })
+
+        let enemySprite = new Sprite(this._context, 'resources/enemies/scout.png')
+        this._enemies = new ObjectPool(function (pos) {
+            let enemy = new Alien(enemySprite, pos, 0.5)
+            // enemy.bulletPool = enemyBullets
+            return enemy
+        })
 
         let game = this
         $(document).on('keydown', function (event) {
@@ -42,6 +51,7 @@ class Game {
                     break
                 case 32:
                     game._player1.shoot()
+                    game._enemies.get({ x: 40, y: 40 })
             }
         })
 
@@ -81,11 +91,15 @@ class Game {
     update(time, delta) {
         this._player1.update(time, delta)
         this._playerBullets.update(time, delta)
+        // this._enemyBullets.update(time, delta)
+        this._enemies.update(time, delta)
     }
 
     render(time) {
         this._context.clearRect(0, 0, this._canvas.width, this._canvas.height)
+        // this._enemyBullets.render(time)
         this._playerBullets.render(time)
+        this._enemies.render(time)
         this._player1.render(time)
     }
 }

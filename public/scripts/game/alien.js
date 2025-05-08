@@ -1,16 +1,21 @@
 class Alien extends GameObject {
     constructor(sprite, pos = { x: 0, y: 0 }, scale = 1) {
-        super(true, sprite, pos, scale)
+        super(false, sprite, pos, scale)
 
-        this.direction = { x: 0, y: 0 }
-        this.speed = 1
+        this.speed = 30
 
+        this.pool = null
         this.health = 3
+        this.bulletPool = null
     }
 
     update(time, delta) {
         this.pos.y += this.speed * delta
         this.sprite.update(time, this.pos, this.scale)
+
+        if (this.pos.y > 600 && this.pool) {
+            this.pool.release(this)
+        }
     }
 
     shoot(sprite, bulletScale = 1) {
