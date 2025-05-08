@@ -276,20 +276,51 @@ class GameManager {
         this._player1Sprite = new Sprite(this._context, 'resources/player1.png')
         this._player1 = new Player(this._player1Sprite, { x: 40, y: 40 }, 0.5)
 
+        this._player2Sprite = new Sprite(this._context, 'resources/player1.png')
+        this._player2 = new Player(this._player2Sprite, { x: canvas.width - 40, y: 40 }, 0.5)
+
         let game = this
         $(document).on('keydown', function (event) {
             switch (event.keyCode) {
                 case 38:
-                    game._player1.direction.y = -1
+                    if (playerId == 1) {
+                        game._player1.direction.y = -1
+                        Socket.updatePlayerPosition("y", -1, 1);
+                    }
+                    else if (playerId == 2) {
+                        game._player2.direction.y = -1
+                        Socket.updatePlayerPosition("y", -1, 2);
+                    }
                     break
                 case 40:
-                    game._player1.direction.y = 1
+                    if (playerId == 1) {
+                        game._player1.direction.y = 1
+                        Socket.updatePlayerPosition("y", 1, 1);
+                    }
+                    else if (playerId == 2) {
+                        game._player2.direction.y = 1
+                        Socket.updatePlayerPosition("y", 1, 2);
+                    }
                     break
                 case 37:
-                    game._player1.direction.x = -1
+                    if (playerId == 1) {
+                        game._player1.direction.x = -1
+                        Socket.updatePlayerPosition("x", -1, 1);
+                    }
+                    else if (playerId == 2) {
+                        game._player2.direction.x = -1
+                        Socket.updatePlayerPosition("x", -1, 2);
+                    }
                     break
                 case 39:
-                    game._player1.direction.x = 1
+                    if (playerId == 1) {
+                        game._player1.direction.x = 1
+                        Socket.updatePlayerPosition("x", 1, 1);
+                    }
+                    else if (playerId == 2) {
+                        game._player2.direction.x = 1
+                        Socket.updatePlayerPosition("x", 1, 2);
+                    }
                     break
             }
         })
@@ -298,11 +329,25 @@ class GameManager {
             switch (event.keyCode) {
                 case 38:
                 case 40:
-                    game._player1.direction.y = 0
+                    if (playerId == 1) {
+                        game._player1.direction.y = 0
+                        Socket.updatePlayerPosition("y", 0, 1);
+                    }
+                    else if (playerId == 2) {
+                        game._player2.direction.y = 0
+                        Socket.updatePlayerPosition("y", 0, 2);
+                    }
                     break
                 case 37:
                 case 39:
-                    game._player1.direction.x = 0
+                    if (playerId == 1) {
+                        game._player1.direction.x = 0
+                        Socket.updatePlayerPosition("x", 0, 1);
+                    }
+                    else if (playerId == 2) {
+                        game._player2.direction.x = 0
+                        Socket.updatePlayerPosition("x", 0, 2);
+                    }
                     break
             }
         })
@@ -325,6 +370,7 @@ class GameManager {
     update(time, delta) {
         this._context.clearRect(0, 0, this._canvas.width, this._canvas.height)
         this._player1.update(time, delta)
+        Socket.updatePlayerPosition(this._player1.pos, playerId);
     }
 }
 
