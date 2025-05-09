@@ -243,6 +243,15 @@ io.on("connection", (socket) => {
         io.emit("users", JSON.stringify(onlineUsers));
     });
 
+    socket.on("remove playing user", (user) => {
+        // Remove the user from the online users list
+        delete onlineUsers[user.username];
+
+        // Broadcast the updated list of online users
+        io.emit("users", JSON.stringify(onlineUsers));
+        io.emit("remove user", JSON.stringify({ username: user.username, avatar: user.avatar, name: user.name }));
+    });
+
     // Handle user logout
     socket.on("disconnect", () => {
         if (user) {

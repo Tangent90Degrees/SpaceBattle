@@ -38,7 +38,7 @@ class Alien extends GameObject {
 
         this.players.forEach(player => {
             if (this.area && player.area && Box.intersects(this.area, player.area)) {
-                player.health -= 1
+                player.health -= 2
                 player.score += 20
                 if (player === game._player1) {
                     $("#p1Score").css("color", "green")

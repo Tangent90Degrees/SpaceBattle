@@ -250,6 +250,8 @@ const OnlineUsersPanel = (function () {
 
     // This function starts the countdown before the game
     const startCountdown = function (playerId) {
+        Socket.removeUser(Authentication.getUser());
+        
         let countdown = 5;
         $("#countdown").text(countdown);
         $("#countdown-overlay").fadeIn(500);

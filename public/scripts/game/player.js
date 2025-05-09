@@ -16,7 +16,7 @@ class Player extends GameObject {
         this.direction = { x: 0, y: 0 }
         this.speed = 60
 
-        this.health = 3
+        this.health = 6
         this.score = 0
         this.bulletPool = null
     }
