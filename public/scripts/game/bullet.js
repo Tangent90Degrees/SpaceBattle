@@ -46,21 +46,6 @@ class Bullet extends GameObject {
                             $("#p2Score").css("color", "white")
                         }, 1000)
                     }
-                    else {
-                        enemy.score -= 10
-                        if (enemy === game._player1) {
-                            $("#p1Score").css("color", "red")
-                            setTimeout(() => {
-                                $("#p1Score").css("color", "white")
-                            }, 1000)
-                        }
-                        else if (enemy === game._player2) {
-                            $("#p2Score").css("color", "red")
-                            setTimeout(() => {
-                                $("#p2Score").css("color", "white")
-                            }, 1000)
-                        }
-                    }
                     this.pool.release(this)
                     return true
                 }

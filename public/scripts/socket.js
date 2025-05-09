@@ -159,6 +159,12 @@ const Socket = (function () {
         }
     }
 
+    const removeUser = function (user) {
+        if (socket && socket.connected) {
+            socket.emit("remove playing user", user);
+        }
+    }
+
     return {
         getSocket,
         connect,
@@ -168,6 +174,7 @@ const Socket = (function () {
         declineInvite,
         updatePlayerPosition,
         updatePlayerShoot,
-        spawnEnemy// Expose the function here
+        spawnEnemy,
+        removeUser// Expose the function here
     };
 })();
