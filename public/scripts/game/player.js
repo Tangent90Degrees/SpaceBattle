@@ -53,6 +53,7 @@ class Player extends GameObject {
 
     shoot() {
         if (this.health > 0) {
+            Sound.play("playerShoot")
             return this.bulletPool.get({ ...this.pos })
         }
     }

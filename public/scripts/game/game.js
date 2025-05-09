@@ -104,11 +104,9 @@ class Game {
                 case 32:
                     if (game.playerId === 1) {
                         game._player1.shoot()
-                        Sound.play("playerShoot")
                         Socket.updatePlayerShoot(game._player1.pos, 1)
                     } else {
                         game._player2.shoot()
-                        Sound.play("playerShoot")
                         Socket.updatePlayerShoot(game._player2.pos, 2)
                     }
                     break
