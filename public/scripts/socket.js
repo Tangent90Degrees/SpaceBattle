@@ -207,6 +207,11 @@ const Socket = (function () {
         }
     }
 
+    const addUser = function (user) {
+        if (socket && socket.connected) {
+            socket.emit("add playing user", user);
+        }
+    }
     const removeUser = function (user) {
         if (socket && socket.connected) {
             socket.emit("remove playing user", user);
@@ -234,6 +239,7 @@ const Socket = (function () {
         updatePlayerShoot,
         spawnEnemy,
         spawnPowerUp,
+        addUser,
         removeUser,
         die// Expose the function here
     };

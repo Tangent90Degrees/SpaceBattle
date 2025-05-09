@@ -254,6 +254,15 @@ io.on("connection", (socket) => {
         io.emit("users", JSON.stringify(onlineUsers));
     });
 
+    socket.on("add playing user", (user) => {
+        // Add the user to the online users list
+        onlineUsers[user.username] = user;
+
+        // Broadcast the updated list of online users
+        io.emit("users", JSON.stringify(onlineUsers));
+        io.emit("add user", JSON.stringify({ username: user.username, avatar: user.avatar, name: user.name }));
+    });
+
     socket.on("remove playing user", (user) => {
         // Remove the user from the online users list
         delete onlineUsers[user.username];
