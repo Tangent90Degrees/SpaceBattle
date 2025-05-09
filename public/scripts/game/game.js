@@ -22,22 +22,26 @@ class Game {
         let enemyBulletSprite = new Sprite(this._context, 'resources/enemies/bullet.png')
         this._enemyBullets = new ObjectPool(function (pos) {
             let bullet =
-                new Bullet(enemyBulletSprite, pos, 0.5, { x: 0, y: 1 }, [game._player1, game._player2])
+                new Bullet(enemyBulletSprite, pos, 0.5, { x: 0, y: 1 }, [game._player1, game._player2], 0)
             bullet.speed = 60
             return bullet
         })
 
         let enemySprite = new Sprite(this._context, 'resources/enemies/scout.png')
         let enemies = this._enemies
-            = new EnemySpawner(enemySprite, [this._player1, this._player2], this._enemyBullets)
+            = new EnemySpawner(enemySprite, [this._player1, this._player2], this._enemyBullets, playerId)
 
         let playerBulletSprite = new Sprite(this._context, 'resources/player/bullet.png')
         this._playerBullets = new ObjectPool(function (pos) {
-            return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies)
+            return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, 0)
         })
 
-        this._player1.bulletPool = this._playerBullets
-        this._player2.bulletPool = this._playerBullets
+        this._player1.bulletPool = new ObjectPool(function (pos) {
+            return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, playerId)
+        })
+        this._player2.bulletPool = new ObjectPool(function (pos) {
+            return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, playerId)
+        })
 
         let game = this
         $(document).on('keydown', function (event) {
@@ -154,7 +158,9 @@ class Game {
         this._enemyBullets.update(time, delta)
         this._enemies.update(time, delta)
         this.totalScore = this._player1.score + this._player2.score
-        $("#score").text(`Total Score: ${this.totalScore}`)
+        $("#sumScore").text(`${this.totalScore}`)
+        $("#p1Score").text(`${this._player1.score}`)
+        $("#p2Score").text(`${this._player2.score}`)
     }
 
     render(time) {

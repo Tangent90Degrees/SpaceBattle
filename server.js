@@ -231,6 +231,10 @@ io.on("connection", (socket) => {
         io.emit("show player shoot", JSON.stringify(playerData));
     })
 
+    socket.on("spawn enemy", (spawnData) => {
+        io.emit("show spawn enemy", JSON.stringify(spawnData));
+    });
+
     // Handle user login
     socket.on("user login", (user) => {
         onlineUsers[user.username] = user;

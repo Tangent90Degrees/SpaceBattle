@@ -1,5 +1,5 @@
 class EnemySpawner extends GameObject {
-    constructor(sprite, players, enemyBullets) {
+    constructor(sprite, players, enemyBullets, playerId) {
         super()
         this._pool = new ObjectPool(function (pos) {
             let enemy = new Alien(sprite, pos, 0.5, players)
@@ -29,6 +29,7 @@ class EnemySpawner extends GameObject {
     }
 
     spawn(pos) {
+        Socket.spawnEnemy(pos, playerId)
         return this._pool.get(pos)
     }
 }
