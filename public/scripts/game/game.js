@@ -172,6 +172,10 @@ class Game {
     endGame() {
         alert("Game Over!");
         Sound.play("gameOver")
+        $("#timer").hide();
+        $("#total-score").hide();
+        $("#game-lives").hide();
+        $("#game-canvas").hide();
         this._timer.stop()
         this._countDown.stop()
         const resultData = {
