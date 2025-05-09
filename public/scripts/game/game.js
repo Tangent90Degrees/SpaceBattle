@@ -11,6 +11,8 @@ class Game {
 
         this.playerId = 0;
 
+        this.totalScore = 0;
+
         let player1Sprite = new Sprite(this._context, 'resources/player/player1.png')
         this._player1 = new Player(player1Sprite, { x: 60, y: 120 }, 0.5)
 
@@ -33,6 +35,7 @@ class Game {
         this._playerBullets = new ObjectPool(function (pos) {
             return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies)
         })
+
         this._player1.bulletPool = this._playerBullets
         this._player2.bulletPool = this._playerBullets
 
