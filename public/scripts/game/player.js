@@ -17,6 +17,7 @@ class Player extends GameObject {
         this.speed = 60
 
         this.health = 3
+        this.score = 0
         this.bulletPool = null
     }
 

@@ -23,6 +23,7 @@ class Bullet extends GameObject {
             this.targets.forEach((enemy) => {
                 if (this.area && enemy.area && Box.intersects(this.area, enemy.area)) {
                     enemy.health -= 1
+                    enemy.score += 10
                     this.pool.release(this)
                     return true
                 }
