@@ -113,7 +113,7 @@ class Game {
                         game._player1.speed = 120
                         Socket.updateSpeed(game._player1.speed, 1)
                     } else {
-                        game._player2.spped = 120
+                        game._player2.speed = 120
                         Socket.updateSpeed(game._player2.speed, 2)
                     }
                     break
