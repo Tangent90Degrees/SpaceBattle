@@ -104,9 +104,11 @@ class Game {
                 case 32:
                     if (game.playerId === 1) {
                         game._player1.shoot()
+                        Sound.play("playerShoot")
                         Socket.updatePlayerShoot(game._player1.pos, 1)
                     } else {
                         game._player2.shoot()
+                        Sound.play("playerShoot")
                         Socket.updatePlayerShoot(game._player2.pos, 2)
                     }
                     break
@@ -171,6 +173,7 @@ class Game {
 
     endGame() {
         alert("Game Over!");
+        Sound.play("gameOver")
         this._timer.stop()
         this._countDown.stop()
         // this.stop(); // Stop the game logic

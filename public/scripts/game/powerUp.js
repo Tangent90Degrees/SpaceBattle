@@ -33,6 +33,7 @@ class PowerUp extends GameObject {
                     this.pool.release(this)
                     return
                 }
+                Sound.play("powerUp")
                 player.health += 1
                 this.health = 1
                 this.age = 3
