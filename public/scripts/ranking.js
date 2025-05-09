@@ -61,6 +61,7 @@ const Ranking = (function() {
                     $("#ranking-overlay").remove();
                     $("#instructions-panel").show();
                     $("#online-users-panel").show();
+                    Socket.addUser(Authentication.getUser());
                 });
             }
         })
