@@ -223,8 +223,13 @@ io.on("connection", (socket) => {
 
     socket.on("update player position", (playerData) => {
         // Send the new position to the user
-        io.emit("show new position", JSON.stringify(playerData));
+        io.emit("show player new position", JSON.stringify(playerData));
     });
+
+    socket.on("update player shoot", (playerData) => {
+        // Send the new shoot to the user
+        io.emit("show player shoot", JSON.stringify(playerData));
+    })
 
     // Handle user login
     socket.on("user login", (user) => {

@@ -59,24 +59,37 @@ const Socket = (function() {
 
         socket.on("show decline invite", (inviter) => {
             inviter = JSON.parse(inviter);
-            if (inviter.username == Authentication.getUser().username)
+            if (inviter.username === Authentication.getUser().username)
                 OnlineUsersPanel.showDeclineInvite();
         });
 
-        socket.on("show new position", (playerData) => {
+        socket.on("show player new position", (playerData) => {
             playerData = JSON.parse(playerData);
-            if (playerData.id == 1 && game.playerId == 2) {
-                if (playerData.direction == "x")
-                    game._player1.direction.x = playerData.directionChange;
-                else if (playerData.direction == "y")
-                    game._player1.direction.y = playerData.directionChange;
-            } else if (playerData.id == 2 && game.playerId == 1) {
-                if (playerData.direction == "x")
-                    game._player2.direction.x = playerData.directionChange;
-                else if (playerData.direction == "y")
-                    game._player2.direction.y = playerData.directionChange;
+            if (playerData.id === 1 && game.playerId === 2) {
+                if (playerData.playerDirection === "x")
+                    game._player1.direction.x = playerData.playerDirectionChange;
+                else if (playerData.playerDirection === "y")
+                    game._player1.direction.y = playerData.playerDirectionChange;
+            } else if (playerData.id === 2 && game.playerId === 1) {
+                if (playerData.playerDirection === "x")
+                    game._player2.direction.x = playerData.playerDirectionChange;
+                else if (playerData.playerDirection === "y")
+                    game._player2.direction.y = playerData.playerDirectionChange;
             }
         });
+
+        sokect.on("show player shoot", (playerData) => {
+            playerData = JSON.parse(playerData);
+            if (playerData.id === 1 && game.playerId === 2) {
+                game._player1.pos = playerData.playerPosition;
+                game._player1.shoot();
+                console.log("player1 shoot");
+            } else if (playerData.id === 2 && game.playerId === 1) {
+                game._player2.pos = playerData.playerPosition;
+                game._player2.shoot();
+                console.log("player2 shoot");
+            }
+        })
     };
 
     // This function disconnects the socket from the server
@@ -114,13 +127,23 @@ const Socket = (function() {
     const updatePlayerPosition = function(playerDirection, playerDirectionChange, playerId) {
         if (socket && socket.connected) {
             const playerData = {
-                direction: playerDirection,
-                directionChange: playerDirectionChange,
+                playerDirection: playerDirection,
+                playerDirectionChange: playerDirectionChange,
                 id: playerId
             };
             socket.emit("update player position", playerData);
         }
     };
+
+    const updatePlayerShoot = function(playerPosition, playerId) {
+        if (socket && socket.connected) {
+            const playerData = {
+                playerPosition: playerPosition,
+                id: playerId
+            };
+            socket.emit("update player shoot", playerData);
+        }
+    }
 
     return {
         getSocket,
@@ -129,6 +152,7 @@ const Socket = (function() {
         sendInvite,
         acceptInvite,
         declineInvite,
-        updatePlayerPosition // Expose the function here
+        updatePlayerPosition,
+        updatePlayerShoot// Expose the function here
     };
 })();

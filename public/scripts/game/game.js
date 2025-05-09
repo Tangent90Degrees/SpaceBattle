@@ -34,13 +34,14 @@ class Game {
             return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies)
         })
         this._player1.bulletPool = this._playerBullets
+        this._player2.bulletPool = this._playerBullets
 
         let game = this
         $(document).on('keydown', function (event) {
             switch (event.keyCode) {
                 case 38:
                 case 87:
-                    if (game.playerId == 1) {
+                    if (game.playerId === 1) {
                         game._player1.direction.y = -1
                         Socket.updatePlayerPosition("y", -1, 1)
                     }
@@ -51,7 +52,7 @@ class Game {
                     break
                 case 40:
                 case 83:
-                    if (game.playerId == 1) {
+                    if (game.playerId === 1) {
                         game._player1.direction.y = 1
                         Socket.updatePlayerPosition("y", 1, 1)
                     }
@@ -62,7 +63,7 @@ class Game {
                     break
                 case 37:
                 case 65:
-                    if (game.playerId == 1) {
+                    if (game.playerId === 1) {
                         game._player1.direction.x = -1
                         Socket.updatePlayerPosition("x", -1, 1)
                     }
@@ -73,7 +74,7 @@ class Game {
                     break
                 case 39:
                 case 68:
-                    if (game.playerId == 1) {
+                    if (game.playerId === 1) {
                         game._player1.direction.x = 1
                         Socket.updatePlayerPosition("x", 1, 1)
                     }
@@ -83,10 +84,14 @@ class Game {
                     }
                     break
                 case 32:
-                    if (game.playerId == 1)
+                    if (game.playerId === 1) {
                         game._player1.shoot()
-                    else
+                        Socket.updatePlayerShoot(game._player1.pos, 1)
+                    }
+                    else {
                         game._player2.shoot()
+                        Socket.updatePlayerShoot(game._player2.pos, 2)
+                    }
             }
         })
 
@@ -96,7 +101,7 @@ class Game {
                 case 40:
                 case 87:
                 case 83:
-                    if (game.playerId == 1) {
+                    if (game.playerId === 1) {
                         game._player1.direction.y = 0
                         Socket.updatePlayerPosition("y", 0, 1)
                     }
@@ -109,7 +114,7 @@ class Game {
                 case 39:
                 case 65:
                 case 68:
-                    if (game.playerId == 1) {
+                    if (game.playerId === 1) {
                         game._player1.direction.x = 0
                         Socket.updatePlayerPosition("x", 0, 1)
                     }
