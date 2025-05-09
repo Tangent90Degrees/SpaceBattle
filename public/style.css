@@ -368,6 +368,18 @@ button.icon:active {
     display: none;
 }
 
+#sumScore {
+    color: white;
+}
+
+#p1Score {
+    color: white;
+}
+
+#p2Score {
+    color: white;
+}
+
 #game-lives {
     position: absolute;
     top: 16%;
