@@ -65,40 +65,40 @@ class Game {
                 case 87:
                     if (game.playerId === 1) {
                         game._player1.direction.y = -1
-                        Socket.updatePlayerPosition("y", -1, 1)
+                        // Socket.updatePlayerPosition("y", -1, 1)
                     } else {
                         game._player2.direction.y = -1
-                        Socket.updatePlayerPosition("y", -1, 2)
+                        // Socket.updatePlayerPosition("y", -1, 2)
                     }
                     break
                 case 40:
                 case 83:
                     if (game.playerId === 1) {
                         game._player1.direction.y = 1
-                        Socket.updatePlayerPosition("y", 1, 1)
+                        // Socket.updatePlayerPosition("y", 1, 1)
                     } else {
                         game._player2.direction.y = 1
-                        Socket.updatePlayerPosition("y", 1, 2)
+                        // Socket.updatePlayerPosition("y", 1, 2)
                     }
                     break
                 case 37:
                 case 65:
                     if (game.playerId === 1) {
                         game._player1.direction.x = -1
-                        Socket.updatePlayerPosition("x", -1, 1)
+                        // Socket.updatePlayerPosition("x", -1, 1)
                     } else {
                         game._player2.direction.x = -1
-                        Socket.updatePlayerPosition("x", -1, 2)
+                        // Socket.updatePlayerPosition("x", -1, 2)
                     }
                     break
                 case 39:
                 case 68:
                     if (game.playerId === 1) {
                         game._player1.direction.x = 1
-                        Socket.updatePlayerPosition("x", 1, 1)
+                        // Socket.updatePlayerPosition("x", 1, 1)
                     } else {
                         game._player2.direction.x = 1
-                        Socket.updatePlayerPosition("x", 1, 2)
+                        // Socket.updatePlayerPosition("x", 1, 2)
                     }
                     break
                 case 32:
@@ -113,10 +113,10 @@ class Game {
                 case 66:
                     if (game.playerId === 1) {
                         game._player1.speed = 120
-                        Socket.updateSpeed(game._player1.speed, 1)
+                        // Socket.updateSpeed(game._player1.speed, 1)
                     } else {
                         game._player2.speed = 120
-                        Socket.updateSpeed(game._player2.speed, 2)
+                        // Socket.updateSpeed(game._player2.speed, 2)
                     }
                     break
             }
@@ -130,10 +130,10 @@ class Game {
                 case 83:
                     if (game.playerId === 1) {
                         game._player1.direction.y = 0
-                        Socket.updatePlayerPosition("y", 0, 1)
+                        // Socket.updatePlayerPosition("y", 0, 1)
                     } else {
                         game._player2.direction.y = 0
-                        Socket.updatePlayerPosition("y", 0, 2)
+                        // Socket.updatePlayerPosition("y", 0, 2)
                     }
                     break
                 case 37:
@@ -142,19 +142,19 @@ class Game {
                 case 68:
                     if (game.playerId === 1) {
                         game._player1.direction.x = 0
-                        Socket.updatePlayerPosition("x", 0, 1)
+                        // Socket.updatePlayerPosition("x", 0, 1)
                     } else {
                         game._player2.direction.x = 0
-                        Socket.updatePlayerPosition("x", 0, 2)
+                        // Socket.updatePlayerPosition("x", 0, 2)
                     }
                     break
                 case 66:
                     if (game.playerId === 1) {
                         game._player1.speed = 60
-                        Socket.updateSpeed(game._player1.speed, 1)
+                        // Socket.updateSpeed(game._player1.speed, 1)
                     } else {
                         game._player2.speed = 60
-                        Socket.updateSpeed(game._player2.speed, 2)
+                        // Socket.updateSpeed(game._player2.speed, 2)
                     }
                     break
             }
@@ -166,9 +166,6 @@ class Game {
         livesContainer.empty(); // Clear existing lives
         for (let i = 0; i < player.health; i++) {
             livesContainer.append('<div class="life-icon"></div>');
-        }
-        if (player.health <= 0) {
-            player.speed = 0; // Stop the player
         }
     }
 
@@ -231,6 +228,9 @@ class Game {
         if ((this._player1.health <= 0 && this._player2.health <= 0) || this._countDown.time <= 0) {
             this.endGame()
         }
+
+        let player = this.playerId === 1 ? this._player1 : this._player2
+        Socket.updatePlayerPosition({ ...player.pos }, { ...player.direction }, this.playerId)
     }
 
     render(time) {

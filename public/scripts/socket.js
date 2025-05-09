@@ -66,15 +66,11 @@ const Socket = (function () {
         socket.on("show player new position", (playerData) => {
             playerData = JSON.parse(playerData);
             if (playerData.id === 1 && game.playerId === 2) {
-                if (playerData.playerDirection === "x")
-                    game._player1.direction.x = playerData.playerDirectionChange;
-                else if (playerData.playerDirection === "y")
-                    game._player1.direction.y = playerData.playerDirectionChange;
+                game._player1.pos = playerData.pos;
+                game._player1.direction = playerData.direction
             } else if (playerData.id === 2 && game.playerId === 1) {
-                if (playerData.playerDirection === "x")
-                    game._player2.direction.x = playerData.playerDirectionChange;
-                else if (playerData.playerDirection === "y")
-                    game._player2.direction.y = playerData.playerDirectionChange;
+                game._player2.pos = playerData.pos;
+                game._player2.direction = playerData.direction
             }
         });
 
@@ -158,12 +154,12 @@ const Socket = (function () {
         }
     }
 
-    const updatePlayerPosition = function (playerDirection, playerDirectionChange, playerId) {
+    const updatePlayerPosition = function (pos, direction, id) {
         if (socket && socket.connected) {
             const playerData = {
-                playerDirection:       playerDirection,
-                playerDirectionChange: playerDirectionChange,
-                id:                    playerId
+                pos:       pos,
+                direction: direction,
+                id:        id
             };
             socket.emit("update player position", playerData);
         }
