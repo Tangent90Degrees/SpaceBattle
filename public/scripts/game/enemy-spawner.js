@@ -12,14 +12,14 @@ class EnemySpawner extends GameObject {
 
     update(time, delta) {
         this._pool.update(time, delta)
+    }
+
+    hostUpdate(time, delta) {
         this.countDown -= delta
 
         if (this.countDown < 0) {
             this.countDown = 2 + 2 * Math.random()
-            if (this.id === 1)
-                this.p1spawn({ x: 20 + Math.random() * 260, y: -20 })
-            else
-                this.p2spawn({ x: 20 + Math.random() * 260, y: -20 })
+            Socket.spawnEnemy({ x: 20 + Math.random() * 260, y: -20 })
         }
     }
 
@@ -31,13 +31,8 @@ class EnemySpawner extends GameObject {
         this._pool.render(time)
     }
 
-    p1spawn(pos) {
-        Socket.spawnEnemy(pos, this.id)
+    spawn(pos) {
         return this._pool.get(pos)
-    }
 
-    p2spawn(pos) {
-        Socket.spawnEnemy(pos, this.id)
-        return this._pool.get(pos)
     }
 }

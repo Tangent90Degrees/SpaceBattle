@@ -1,20 +1,20 @@
-const Socket = (function() {
+const Socket = (function () {
     // This stores the current Socket.IO socket
     let socket = null;
 
     // This function gets the socket from the module
-    const getSocket = function() {
+    const getSocket = function () {
         return socket;
     };
 
     // This function connects the server and initializes the socket
-    const connect = function() {
+    const connect = function () {
         socket = io();
 
         // Wait for the socket to connect successfully
         socket.on("connect", () => {
             socket.emit("user login", Authentication.getUser());
-            
+
             // Get the online user list
             socket.emit("get users");
         });
@@ -49,7 +49,7 @@ const Socket = (function() {
                 OnlineUsersPanel.showInvite(inviter);
             }
         });
-        
+
         socket.on("show accept invite", (inviteData) => {
             const { inviter } = JSON.parse(inviteData);
             if (inviter.username === Authentication.getUser().username) {
@@ -92,24 +92,20 @@ const Socket = (function() {
         });
 
         socket.on("show spawn enemy", (spawnData) => {
-            spawnData = JSON.parse(spawnData);
-            if (spawnData.id === 1 && game.playerId === 2) {
-                game._enemies.p2spawn(spawnData.pos);
-            } else if (spawnData.id === 2 && game.playerId === 1) {
-                game._enemies.p1spawn(spawnData.pos);
-            }
+            spawnData = JSON.parse(spawnData)
+            game._enemies.spawn(spawnData.pos)
         });
     };
 
     // This function disconnects the socket from the server
-    const disconnect = function() {
+    const disconnect = function () {
         socket.disconnect();
         socket = null;
     };
 
 
     // This function sends an invite to the user
-    const sendInvite = function(inviter, invitee) {
+    const sendInvite = function (inviter, invitee) {
         if (socket && socket.connected) {
             const inviteData = {
                 inviter: { ...inviter, playerId: 1 }, // Set inviter's playerId to 1
@@ -120,49 +116,48 @@ const Socket = (function() {
     };
 
     // This function accepts the invite
-    const acceptInvite = function(inviter) {
+    const acceptInvite = function (inviter) {
         if (socket && socket.connected) {
             socket.emit("accept invite", { inviter, playerId: 1 });
         }
     };
 
     // This function declines the invite
-    const declineInvite = function(inviter) {
+    const declineInvite = function (inviter) {
         if (socket && socket.connected) {
             socket.emit("decline invite", inviter);
         }
     }
 
-    const updatePlayerPosition = function(playerDirection, playerDirectionChange, playerId) {
+    const updatePlayerPosition = function (playerDirection, playerDirectionChange, playerId) {
         if (socket && socket.connected) {
             const playerData = {
-                playerDirection: playerDirection,
+                playerDirection:       playerDirection,
                 playerDirectionChange: playerDirectionChange,
-                id: playerId
+                id:                    playerId
             };
             socket.emit("update player position", playerData);
         }
     };
 
-    const updatePlayerShoot = function(playerPosition, playerId) {
+    const updatePlayerShoot = function (playerPosition, playerId) {
         if (socket && socket.connected) {
             const playerData = {
                 playerPosition: playerPosition,
-                id: playerId
+                id:             playerId
             };
             socket.emit("update player shoot", playerData);
         }
     }
 
-    const spawnEnemy = function(spawnPos, playerId) {
+    const spawnEnemy = function (spawnPos) {
         if (socket && socket.connected) {
             const spawnData = {
-                pos: spawnPos,
-                id: playerId
+                pos: spawnPos
             }
-            socket.emit("spawn enemy", spawnData);
+            socket.emit("spawn enemy", spawnData)
         }
-    };
+    }
 
     return {
         getSocket,

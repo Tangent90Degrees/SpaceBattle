@@ -51,8 +51,7 @@ class Game {
                     if (game.playerId === 1) {
                         game._player1.direction.y = -1
                         Socket.updatePlayerPosition("y", -1, 1)
-                    }
-                    else {
+                    } else {
                         game._player2.direction.y = -1
                         Socket.updatePlayerPosition("y", -1, 2)
                     }
@@ -62,8 +61,7 @@ class Game {
                     if (game.playerId === 1) {
                         game._player1.direction.y = 1
                         Socket.updatePlayerPosition("y", 1, 1)
-                    }
-                    else {
+                    } else {
                         game._player2.direction.y = 1
                         Socket.updatePlayerPosition("y", 1, 2)
                     }
@@ -73,8 +71,7 @@ class Game {
                     if (game.playerId === 1) {
                         game._player1.direction.x = -1
                         Socket.updatePlayerPosition("x", -1, 1)
-                    }
-                    else {
+                    } else {
                         game._player2.direction.x = -1
                         Socket.updatePlayerPosition("x", -1, 2)
                     }
@@ -84,8 +81,7 @@ class Game {
                     if (game.playerId === 1) {
                         game._player1.direction.x = 1
                         Socket.updatePlayerPosition("x", 1, 1)
-                    }
-                    else {
+                    } else {
                         game._player2.direction.x = 1
                         Socket.updatePlayerPosition("x", 1, 2)
                     }
@@ -94,8 +90,7 @@ class Game {
                     if (game.playerId === 1) {
                         game._player1.shoot()
                         Socket.updatePlayerShoot(game._player1.pos, 1)
-                    }
-                    else {
+                    } else {
                         game._player2.shoot()
                         Socket.updatePlayerShoot(game._player2.pos, 2)
                     }
@@ -111,8 +106,7 @@ class Game {
                     if (game.playerId === 1) {
                         game._player1.direction.y = 0
                         Socket.updatePlayerPosition("y", 0, 1)
-                    }
-                    else {
+                    } else {
                         game._player2.direction.y = 0
                         Socket.updatePlayerPosition("y", 0, 2)
                     }
@@ -124,8 +118,7 @@ class Game {
                     if (game.playerId === 1) {
                         game._player1.direction.x = 0
                         Socket.updatePlayerPosition("x", 0, 1)
-                    }
-                    else {
+                    } else {
                         game._player2.direction.x = 0
                         Socket.updatePlayerPosition("x", 0, 2)
                     }
@@ -157,6 +150,7 @@ class Game {
         this._playerBullets.update(time, delta)
         this._enemyBullets.update(time, delta)
         this._enemies.update(time, delta)
+        if (this.playerId === 1) this._enemies.hostUpdate(time, delta)
         this.totalScore = this._player1.score + this._player2.score
         $("#sumScore").text(`${this.totalScore}`)
         $("#p1Score").text(`${this._player1.score}`)
