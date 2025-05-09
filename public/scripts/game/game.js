@@ -32,9 +32,6 @@ class Game {
             = new EnemySpawner(enemySprite, [this._player1, this._player2], this._enemyBullets, this.playerId)
 
         let playerBulletSprite = new Sprite(this._context, 'resources/player/bullet.png')
-        this._playerBullets = new ObjectPool(function (pos) {
-            return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, 0)
-        })
 
         let powerUpSprite = new Sprite(this._context, 'resources/heal.png')
         this._powerup = new ObjectPool(function (pos) {
@@ -192,7 +189,8 @@ class Game {
     update(time, delta) {
         this._player1.update(time, delta)
         this._player2.update(time, delta)
-        this._playerBullets.update(time, delta)
+        this._player1.bulletPool.update(time, delta)
+        this._player2.bulletPool.update(time, delta)
         this._enemyBullets.update(time, delta)
         this._enemies.update(time, delta)
         this._powerup.update(time, delta)
@@ -215,7 +213,8 @@ class Game {
     render(time) {
         this._context.clearRect(0, 0, this._canvas.width, this._canvas.height)
         this._enemyBullets.render(time)
-        this._playerBullets.render(time)
+        this._player1.bulletPool.render(time)
+        this._player2.bulletPool.render(time)
         this._enemies.render(time)
         this._powerup.render(time)
         this._player1.render(time)
