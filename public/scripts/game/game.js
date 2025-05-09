@@ -13,6 +13,9 @@ class Game {
 
         this.totalScore = 0;
 
+        this.lives = 6; // Initialize player lives
+        this.updateLivesDisplay();
+
         let player1Sprite = new Sprite(this._context, 'resources/player/player1.png')
         this._player1 = new Player(player1Sprite, { x: 60, y: 120 }, 0.5)
 
@@ -127,6 +130,29 @@ class Game {
         })
     }
 
+    updateLivesDisplay() {
+        const livesContainer = $("#game-lives");
+        livesContainer.empty(); // Clear existing lives
+        for (let i = 0; i < this.lives; i++) {
+            livesContainer.append('<div class="life-icon"></div>');
+        }
+    }
+
+    loseLife() {
+        if (this.lives > 0) {
+            this.lives--;
+            this.updateLivesDisplay();
+        }
+        if (this.lives === 0) {
+            this.endGame();
+        }
+    }
+
+    endGame() {
+        alert("Game Over!");
+        this.stop(); // Stop the game logic
+    }
+
     start(playerId) {
         this.playerId = playerId;
         
@@ -168,3 +194,4 @@ class Game {
 }
 
 let game = new Game
+
