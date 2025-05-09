@@ -9,7 +9,7 @@ become more powerful and the more points you can earn. However, you can probably
 worry, there will be randomly generated power-ups to help you during the game. 
 
 ## How to Start the Game
-1. Install the required dependencies by running the
+1. Install the required dependencies by running the:
    ```bash
    npm install
    
