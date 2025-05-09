@@ -209,7 +209,6 @@ const OnlineUsersPanel = (function () {
         const invitee = $(this).data("user");
         const inviter = Authentication.getUser(); // Get the current user as the inviter
         if (inviter) {
-            console.log("Inviting user: ", invitee.username);
             Socket.sendInvite(inviter, invitee); // Pass both inviter and invitee
         } else {
             console.error("Inviter is undefined.");

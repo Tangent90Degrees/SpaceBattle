@@ -147,7 +147,7 @@ const Socket = (function () {
                 inviter: { ...inviter, playerId: 1 }, // Set inviter's playerId to 1
                 invitee: { ...invitee, playerId: 2 }  // Set invitee's playerId to 2
             };
-            socket.emit("accept invite", { inviter, inviteData });
+            socket.emit("accept invite", inviteData);
         }
     };
 
