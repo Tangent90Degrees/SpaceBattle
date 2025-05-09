@@ -226,6 +226,11 @@ io.on("connection", (socket) => {
         io.emit("show player new position", JSON.stringify(playerData));
     });
 
+    socket.on("update speed", (playerData) => {
+        // Send the new speed to the user
+        io.emit("show player new speed", JSON.stringify(playerData));
+    });
+
     socket.on("update player shoot", (playerData) => {
         // Send the new shoot to the user
         io.emit("show player shoot", JSON.stringify(playerData));

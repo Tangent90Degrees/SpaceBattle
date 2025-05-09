@@ -78,6 +78,15 @@ const Socket = (function () {
             }
         });
 
+        socket.on("show player new speed", (playerData) => {
+            playerData = JSON.parse(playerData);
+            if (playerData.id === 1 && game.playerId === 2) {
+                game._player1.speed = playerData.playerSpeed;
+            } else if (playerData.id === 2 && game.playerId === 1) {
+                game._player2.speed = playerData.playerSpeed;
+            }
+        });
+
         socket.on("show player shoot", (playerData) => {
             playerData = JSON.parse(playerData);
             if (playerData.id === 1 && game.playerId === 2) {
@@ -155,6 +164,16 @@ const Socket = (function () {
         }
     };
 
+    const updateSpeed = function (playerSpeed, playerId) {
+        if (socket && socket.connected) {
+            const playerData = {
+                playerSpeed: playerSpeed,
+                id:          playerId
+            };
+            socket.emit("update speed", playerData);
+        }
+    };
+
     const updatePlayerShoot = function (playerPosition, playerId) {
         if (socket && socket.connected) {
             const playerData = {
@@ -197,6 +216,7 @@ const Socket = (function () {
         acceptInvite,
         declineInvite,
         updatePlayerPosition,
+        updateSpeed,
         updatePlayerShoot,
         spawnEnemy,
         removeUser,

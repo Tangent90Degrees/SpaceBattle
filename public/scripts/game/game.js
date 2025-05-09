@@ -107,6 +107,16 @@ class Game {
                         game._player2.shoot()
                         Socket.updatePlayerShoot(game._player2.pos, 2)
                     }
+                    break
+                case 66:
+                    if (game.playerId === 1) {
+                        game._player1.speed = 120
+                        Socket.updateSpeed(game._player1.speed, 1)
+                    } else {
+                        game._player2.spped = 120
+                        Socket.updateSpeed(game._player2.speed, 2)
+                    }
+                    break
             }
         })
 
@@ -134,6 +144,15 @@ class Game {
                     } else {
                         game._player2.direction.x = 0
                         Socket.updatePlayerPosition("x", 0, 2)
+                    }
+                    break
+                case 66:
+                    if (game.playerId === 1) {
+                        game._player1.speed = 60
+                        Socket.updateSpeed(game._player1.speed, 1)
+                    } else {
+                        game._player2.speed = 60
+                        Socket.updateSpeed(game._player2.speed, 2)
                     }
                     break
             }
