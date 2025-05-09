@@ -65,12 +65,12 @@ const Socket = (function() {
 
         socket.on("show new position", (playerData) => {
             playerData = JSON.parse(playerData);
-            if (playerData.id == 1) {
+            if (playerData.id == 1 && game.playerId == 2) {
                 if (playerData.direction == "x")
                     game._player1.direction.x = playerData.directionChange;
                 else if (playerData.direction == "y")
                     game._player1.direction.y = playerData.directionChange;
-            } else if (playerData.id == 2) {
+            } else if (playerData.id == 2 && game.playerId == 1) {
                 if (playerData.direction == "x")
                     game._player2.direction.x = playerData.directionChange;
                 else if (playerData.direction == "y")
