@@ -105,6 +105,11 @@ const Socket = (function () {
             game._enemies.spawn(spawnData.pos)
         });
 
+        socket.on("show spawn powerUp", (spawnData) => {
+            spawnData = JSON.parse(spawnData)
+            game._powerup.spawn(spawnData.pos)
+        });
+
         socket.on("show die", (playerData) => {
             playerData = JSON.parse(playerData);
             if (playerData.id === 1 && game.playerId === 2) {
@@ -193,6 +198,15 @@ const Socket = (function () {
         }
     }
 
+    const spawnPowerUp = function (spawnPos) {
+        if (socket && socket.connected) {
+            const spawnData = {
+                pos: spawnPos
+            }
+            socket.emit("spawn powerUp", spawnData)
+        }
+    }
+
     const removeUser = function (user) {
         if (socket && socket.connected) {
             socket.emit("remove playing user", user);
@@ -219,6 +233,7 @@ const Socket = (function () {
         updateSpeed,
         updatePlayerShoot,
         spawnEnemy,
+        spawnPowerUp,
         removeUser,
         die// Expose the function here
     };

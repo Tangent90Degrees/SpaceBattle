@@ -34,9 +34,8 @@ class Game {
         let playerBulletSprite = new Sprite(this._context, 'resources/player/bullet.png')
 
         let powerUpSprite = new Sprite(this._context, 'resources/heal.png')
-        this._powerup = new ObjectPool(function (pos) {
-            return new PowerUp(powerUpSprite, pos, 0.5,[this._player1, this._player2])
-        })
+        this._powerup = this._powerup
+            = new PowerUpSpawner(powerUpSprite, [this._player1, this._player2], this.playerId)
 
         this._player1.bulletPool = new ObjectPool(function (pos) {
             return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, 1)
@@ -171,7 +170,7 @@ class Game {
 
     start(playerId) {
         this.playerId = playerId;
-        
+
         this._countDown.start(function (time) {
                 let minutes = Math.floor(time / 60).toString().padStart(2, '0');
                 let seconds = (time % 60).toString().padStart(2, '0');
@@ -196,7 +195,10 @@ class Game {
         this._powerup.update(time, delta)
         if (this.playerId === 1) this.updateLivesDisplay(this._player1.health)
         if (this.playerId === 2) this.updateLivesDisplay(this._player2.health)
-        if (this.playerId === 1) this._enemies.hostUpdate(time, delta)
+        if (this.playerId === 1) {
+            this._enemies.hostUpdate(time, delta)
+            this._powerup.hostUpdate(time, delta)
+        }
         this.totalScore = this._player1.score + this._player2.score
         $("#sumScore").text(`${this.totalScore}`)
         $("#p1Score").text(`${this._player1.score}`)

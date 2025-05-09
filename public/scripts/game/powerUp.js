@@ -7,32 +7,35 @@ class PowerUp extends GameObject {
         this.health = 1
         this.bulletPool = null
         this.players = players
-        this.speed = 30
-        this.age = 300
+        this.age = 3
     }
 
     update(time, delta) {
-        this.age -= this.speed * delta
+        this.age -= delta
 
         if (this.age <= 0 && this.pool) {
             this.health = 1
-            this.age = 300
+            this.age = 3
             this.pool.release(this)
             return
         }
 
         if (this.health <= 0 && this.pool) {
             this.health = 1
-            this.age = 300
+            this.age = 3
             this.pool.release(this)
             return
         }
 
         this.players.forEach(player => {
             if (this.area && player.area && Box.intersects(this.area, player.area)) {
+                if (player.health >= 6) {
+                    this.pool.release(this)
+                    return
+                }
                 player.health += 1
                 this.health = 1
-                this.age = 300
+                this.age = 3
                 this.pool.release(this)
                 return true
             }
