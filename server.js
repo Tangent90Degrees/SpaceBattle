@@ -157,18 +157,16 @@ app.post("/ranking", (req, res) => {
     const { p1Score, p2Score, p1Username, p2Username } = req.body;
 
     // Update New Highest Score
-    if (username === p1Username) {
-        if (!rankings[username]) {
-            rankings[username] = { highestScore: p1Score };
-        } else {
-            rankings[username] = { highestScore: Math.max(rankings[username].highestScore, p1Score) };
-        }
-    } else if (username === p2Username) {
-        if (!rankings[username]) {
-            rankings[username] = { highestScore: p2Score };
-        } else {
-            rankings[username] = { highestScore: Math.max(rankings[username].highestScore, p2Score) };
-        }
+    if (!rankings[p1Username]) {
+        rankings[p1Username] = { highestScore: p1Score };
+    } else {
+        rankings[p1Username] = { highestScore: Math.max(rankings[p1Username].highestScore, p1Score) };
+    }
+
+    if (!rankings[p2Username]) {
+        rankings[p2Username] = { highestScore: p2Score };
+    } else {
+        rankings[p2Username] = { highestScore: Math.max(rankings[p2Username].highestScore, p2Score) };
     }
 
     const sortedRankings = Object.entries(rankings)
