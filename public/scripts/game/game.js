@@ -178,6 +178,13 @@ class Game {
         $("#sumScore").text(`${this.totalScore}`)
         $("#p1Score").text(`${this._player1.score}`)
         $("#p2Score").text(`${this._player2.score}`)
+
+        if (this.playerId === 1 && this._player1.health <= 0) {
+            Socket.die(1)
+        }
+        else if (this.playerId === 2 && this._player2.health <= 0) {
+            Socket.die(2)
+        }
     }
 
     render(time) {

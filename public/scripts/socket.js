@@ -95,6 +95,21 @@ const Socket = (function () {
             spawnData = JSON.parse(spawnData)
             game._enemies.spawn(spawnData.pos)
         });
+
+        socket.on("show die", (playerData) => {
+            playerData = JSON.parse(playerData);
+            if (playerData.id === 1 && game.playerId === 2) {
+                game._player1.health--;
+                if (game._player1.health <= 0) {
+                    console.log("player1 die");
+                }
+            } else if (playerData.id === 2 && game.playerId === 1) {
+                game._player2.health--;
+                if (game._player2.health <= 0) {
+                    console.log("player2 die");
+                }
+            }
+        });
     };
 
     // This function disconnects the socket from the server
@@ -165,6 +180,15 @@ const Socket = (function () {
         }
     }
 
+    const die = function (playerId) {
+        if (socket && socket.connected) {
+            const playerData = {
+                id: playerId
+            };
+            socket.emit("die", playerData);
+        }
+    }
+
     return {
         getSocket,
         connect,
@@ -175,6 +199,7 @@ const Socket = (function () {
         updatePlayerPosition,
         updatePlayerShoot,
         spawnEnemy,
-        removeUser// Expose the function here
+        removeUser,
+        die// Expose the function here
     };
 })();
