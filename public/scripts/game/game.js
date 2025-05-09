@@ -174,17 +174,20 @@ class Game {
         Sound.play("gameOver")
         this._timer.stop()
         this._countDown.stop()
-        // this.stop(); // Stop the game logic
         const resultData = {
             p1Score: this._player1.score,
             p2Score: this._player2.score,
+            p1Username: this._player1.username,
+            p2Username: this._player2.username,
             id: this.playerId,
         }
         Ranking.show(resultData);
     }
 
-    start(playerId) {
+    start(playerId, player1Username, player2Username) {
         this.playerId = playerId;
+        this._player1.username = player1Username;
+        this._player2.username = player2Username;
 
         this._countDown.start(function (time) {
                 let minutes = Math.floor(time / 60).toString().padStart(2, '0');

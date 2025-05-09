@@ -152,31 +152,31 @@ app.get("/signout", (req, res) => {
 
 const rankings = {};
 
-app.get("/ranking", (req, res) => {
+app.post("/ranking", (req, res) => {
     const username = req.session.user.username;
-    const highestScore = rankings[username];
+    const { p1Score, p2Score, p1Username, p2Username } = req.body;
+
+    // Update New Highest Score
+    if (username === p1Username) {
+        if (!rankings[username]) {
+            rankings[username] = { highestScore: p1Score };
+        } else {
+            rankings[username] = { highestScore: Math.max(rankings[username].highestScore, p1Score) };
+        }
+    } else if (username === p2Username) {
+        if (!rankings[username]) {
+            rankings[username] = { highestScore: p2Score };
+        } else {
+            rankings[username] = { highestScore: Math.max(rankings[username].highestScore, p2Score) };
+        }
+    }
 
     const sortedRankings = Object.entries(rankings)
-        .map(([username, score]) => ({ username, score }))
+        .map(([username, data]) => ({ username, score: data.highestScore }))
         .sort((a, b) => b.score - a.score);
 
     // Sending a success response
-    res.json({ status: "success", highestScore, sortedRankings });
-});
-
-app.post("/ranking", (req, res) => {
-    const username = req.session.user.username;
-    const score = req.body;
-
-    // Update New Highest Score
-    if (!rankings[username]) {
-        rankings[username] = { highestScore: score };
-    } else {
-        rankings[username] = Math.max(rankings[username], score);
-    }
-
-    // Sending a success response
-    res.json({ status: "success" });
+    res.json({ status: "success", highestScore: rankings[username].highestScore, sortedRankings: sortedRankings });
 });
 
 const { createServer } = require('http');
@@ -212,8 +212,8 @@ io.on("connection", (socket) => {
     });
 
     socket.on("accept invite", (inviteData) => {
-        const { inviter } = inviteData;
-        io.emit("show accept invite", JSON.stringify({ inviter }));
+        const { inviter, invitee } = inviteData;
+        io.emit("show accept invite", JSON.stringify({ inviter, invitee }));
     });
 
     socket.on("decline invite", (inviter) => {
