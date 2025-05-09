@@ -18,4 +18,5 @@ worry, there will be randomly generated power-ups to help you during the game.
    node server.js
 
 3. Open Chrome and naviagte to:
-    http://localhost:8000/main.html
+   ```bash
+   http://localhost:8000/main.html
