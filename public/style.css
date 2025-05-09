@@ -248,24 +248,41 @@ button.icon:active {
 }
 
 #instructions-content {
-    font-size: 35px;
-    line-height: 1.6;
-    flex-grow: 1;
+    font-size: 25px;
     overflow-y: auto;
+    flex-grow: 1;
 }
 
 #instructions-content p {
-    font-size: 40px;
-    color: white;
+    font-size: 30px;
+    color: yellow;
+    font-weight: bold;
+    margin: 0;
 }
 
 #instructions-content ul {
-    margin: 0 10px;
     padding: 0;
+    margin: 0 0 0 20px;
 }
 
 #instructions-content li {
     color: white;
+    margin: 0;
+}
+
+#instructions-content strong {
+    color: black;
+    margin: 0;
+}
+
+#instructions-content em {
+    color: lightgreen;
+    margin: 0;
+}
+
+#instructions-content #heart {
+    color: lightsalmon;
+    font-weight: bold;
 }
 
 #online-users-area {
