@@ -10,8 +10,7 @@ const Ranking = (function() {
             if (json.status === "success") {
                 const { highestScore, sortedRankings } = json;
 
-                const currentUser = Authentication.getUser().userName;
-                if (currentUser === data.p1Username) {
+                if (data.id === 1) {
                     yourScore = data.p1Score;
                     teammateScore = data.p2Score;
                 }
