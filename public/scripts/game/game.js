@@ -13,9 +13,6 @@ class Game {
 
         this.totalScore = 0;
 
-        this.lives = 6; // Initialize player lives
-        this.updateLivesDisplay();
-
         let player1Sprite = new Sprite(this._context, 'resources/player/player1.png')
         this._player1 = new Player(player1Sprite, { x: 60, y: 120 }, 0.5)
 
@@ -45,6 +42,14 @@ class Game {
         this._player2.bulletPool = new ObjectPool(function (pos) {
             return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, 2)
         })
+
+        if (this.playerId === 1) {
+            this.updateLivesDisplay(this._player1.health); // Update the player1 lives display
+        }
+        else {
+            this.updateLivesDisplay(this._player2.health); // Update the player2 lives display
+        }
+
 
         let game = this
         $(document).on('keydown', function (event) {
@@ -130,21 +135,11 @@ class Game {
         })
     }
 
-    updateLivesDisplay() {
+    updateLivesDisplay(lives) {
         const livesContainer = $("#game-lives");
         livesContainer.empty(); // Clear existing lives
-        for (let i = 0; i < this.lives; i++) {
+        for (let i = 0; i < lives; i++) {
             livesContainer.append('<div class="life-icon"></div>');
-        }
-    }
-
-    loseLife() {
-        if (this.lives > 0) {
-            this.lives--;
-            this.updateLivesDisplay();
-        }
-        if (this.lives === 0) {
-            this.endGame();
         }
     }
 
@@ -176,6 +171,8 @@ class Game {
         this._playerBullets.update(time, delta)
         this._enemyBullets.update(time, delta)
         this._enemies.update(time, delta)
+        if (this.playerId === 1) this.updateLivesDisplay(this._player1.health)
+        if (this.playerId === 2) this.updateLivesDisplay(this._player2.health)
         if (this.playerId === 1) this._enemies.hostUpdate(time, delta)
         this.totalScore = this._player1.score + this._player2.score
         $("#sumScore").text(`${this.totalScore}`)
