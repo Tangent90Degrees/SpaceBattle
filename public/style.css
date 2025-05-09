@@ -355,10 +355,10 @@ button.icon:active {
 
 #total-score {
     position: absolute;
-    top: 16%;
+    top: 17%;
     left: 50%; /* Center horizontally */
     transform: translateX(-50%);
-    font-size: 36px;
+    font-size: 24px;
     font-weight: bold;
     color: white;
     background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
@@ -394,7 +394,7 @@ button.icon:active {
 .life-icon {
     width: 30px;
     height: 30px;
-    background: url("resources/life-icon.png") no-repeat center center; /* Replace with your life icon */
+    background: url("resources/life-icon.jpg") no-repeat center center; /* Replace with your life icon */
     background-size: contain;
     display: inline-block;
     margin: 0 5px;
