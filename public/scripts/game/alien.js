@@ -7,6 +7,7 @@ class Alien extends GameObject {
 
         this.pool = null
         this.health = 3
+        this.score = 0
         this.bulletPool = null
         this.players = players
 

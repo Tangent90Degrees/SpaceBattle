@@ -153,6 +153,8 @@ class Game {
         this._playerBullets.update(time, delta)
         this._enemyBullets.update(time, delta)
         this._enemies.update(time, delta)
+        this.totalScore = this._player1.score + this._player2.score
+        $("#score").text(`Total Score: ${this.totalScore}`)
     }
 
     render(time) {
