@@ -19,6 +19,7 @@ class Player extends GameObject {
 
         this.health = 6
         this.score = 0
+        this.username = null
         this.bulletPool = null
 
         this._sprites = {
