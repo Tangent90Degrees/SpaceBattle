@@ -174,7 +174,7 @@ app.post("/ranking", (req, res) => {
         .sort((a, b) => b.score - a.score);
 
     // Sending a success response
-    res.json({ status: "success", highestScore: rankings[username].highestScore, sortedRankings: sortedRankings });
+    res.json({ status: "success", p1HighestScore: rankings[p1Username].highestScore, p2HighestScore: rankings[p2Username].highestScore, sortedRankings: sortedRankings });
 });
 
 const { createServer } = require('http');
