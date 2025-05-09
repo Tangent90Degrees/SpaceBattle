@@ -280,7 +280,7 @@ button.icon:active {
     margin: 0;
 }
 
-#instructions-content #heart {
+#instructions-content .heart {
     color: lightsalmon;
     font-weight: bold;
 }
@@ -339,20 +339,6 @@ button.icon:active {
 #invite-overlay, #countdown-overlay, #decline-notification-overlay {
     background: var(--overlay-background);
     text-align: center;
-    display: none;
-}
-
-#returnButton {
-    position: absolute;
-    top: 94%;
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%);
-    background: var(--button-background);
-    color: var(--button-color);
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
     display: none;
 }
 

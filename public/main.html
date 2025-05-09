@@ -42,8 +42,8 @@
                     <li><strong>Scoring:</strong> Shoot aliens to score points.</li>
                     <li><strong>Lives:</strong> Each player starts with six hearts.</li>
                     <ul>
-                        <li>Lose <span id="heart">1 heart</span> if you are shot by an alien.</li>
-                        <li>Lose <span id="heart">2 hearts</span> if you crash into an alien.</li>
+                        <li>Lose <span class="heart">1 heart</span> if you are shot by an alien.</li>
+                        <li>Lose <span class="heart">2 hearts</span> if you crash into an alien.</li>
                     </ul>
                     <li><strong>Power-ups:</strong> Collect power-ups to gain an extra life.</li>
                     <li><strong>Game Over:</strong> The game ends when all players lose their hearts or the timer runs out.</li>
@@ -62,7 +62,6 @@
         <canvas id="game-canvas">
 
         </canvas> <!-- Added game canvas -->
-        <button id="returnButton">Return to Menu</button>
     </div>
 </div>
 
@@ -169,11 +168,6 @@
             const selectedAvatar = $(this).val();
             const avatarCode = Avatar.getCode(selectedAvatar);
             $("#selected-avatar").html(avatarCode);
-        });
-
-        // Handle the "Return to Menu" button click
-        $("#returnButton").on("click", function() {
-            Game.returnToMenu();
         });
     });
 
