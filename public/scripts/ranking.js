@@ -9,14 +9,17 @@ const Ranking = (function() {
         .then((res) => res.json())
         .then((json) => {
             if (json.status === "success") {
-                const { highestScore, sortedRankings } = json;
-
+                const { p1HighestScore, p2HighestScore, sortedRankings } = json;
+                let yourScore, highestScore, teammateScore;
+                
                 if (data.id === 1) {
                     yourScore = data.p1Score;
+                    highestScore = p1HighestScore;
                     teammateScore = data.p2Score;
                 }
                 else {
                     yourScore = data.p2Score;
+                    highestScore = p2HighestScore;
                     teammateScore = data.p1Score;
                 }
 
