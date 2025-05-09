@@ -21,4 +21,9 @@ class Timer {
             }
         }, 1000 / this._frameRate)
     }
+
+    stop() {
+        clearInterval(this._interval)
+        this._interval = null
+    }
 }
