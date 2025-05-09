@@ -165,7 +165,13 @@ class Game {
 
     endGame() {
         alert("Game Over!");
-        this.stop(); // Stop the game logic
+        // this.stop(); // Stop the game logic
+        const resultData = {
+            p1Score: this._player1.score,
+            p2Score: this._player2.score,
+            id: this.playerId,
+        }
+        Ranking.show(resultData);
     }
 
     start(playerId) {
