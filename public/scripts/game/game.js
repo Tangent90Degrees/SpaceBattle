@@ -48,10 +48,10 @@ class Game {
         })
 
         if (this.playerId === 1) {
-            this.updateLivesDisplay(this._player1.health); // Update the player1 lives display
+            this.updateLivesDisplay(this._player1); // Update the player1 lives display
         }
         else {
-            this.updateLivesDisplay(this._player2.health); // Update the player2 lives display
+            this.updateLivesDisplay(this._player2); // Update the player2 lives display
         }
 
 
@@ -158,11 +158,14 @@ class Game {
         })
     }
 
-    updateLivesDisplay(lives) {
+    updateLivesDisplay(player) {
         const livesContainer = $("#game-lives");
         livesContainer.empty(); // Clear existing lives
-        for (let i = 0; i < lives; i++) {
+        for (let i = 0; i < player.health; i++) {
             livesContainer.append('<div class="life-icon"></div>');
+        }
+        if (player.health <= 0) {
+            player.speed = 0; // Stop the player
         }
     }
 
@@ -202,8 +205,8 @@ class Game {
         this._enemyBullets.update(time, delta)
         this._enemies.update(time, delta)
         this._powerup.update(time, delta)
-        if (this.playerId === 1) this.updateLivesDisplay(this._player1.health)
-        if (this.playerId === 2) this.updateLivesDisplay(this._player2.health)
+        if (this.playerId === 1) this.updateLivesDisplay(this._player1)
+        if (this.playerId === 2) this.updateLivesDisplay(this._player2)
         if (this.playerId === 1) {
             this._enemies.hostUpdate(time, delta)
             this._powerup.hostUpdate(time, delta)
