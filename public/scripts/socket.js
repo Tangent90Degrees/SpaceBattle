@@ -51,9 +51,9 @@ const Socket = (function () {
         });
 
         socket.on("show accept invite", (inviteData) => {
-            const { inviter } = JSON.parse(inviteData);
+            const { inviter, invitee } = JSON.parse(inviteData);
             if (inviter.username === Authentication.getUser().username) {
-                OnlineUsersPanel.startCountdown(1); // Inviter starts as player 1
+                OnlineUsersPanel.startCountdown(1, inviter.username, invitee.username); // Inviter starts as player 1
             }
         });
 
@@ -145,9 +145,13 @@ const Socket = (function () {
     };
 
     // This function accepts the invite
-    const acceptInvite = function (inviter) {
+    const acceptInvite = function (inviter, invitee) {
         if (socket && socket.connected) {
-            socket.emit("accept invite", { inviter, playerId: 1 });
+            const inviteData = {
+                inviter: { ...inviter, playerId: 1 }, // Set inviter's playerId to 1
+                invitee: { ...invitee, playerId: 2 }  // Set invitee's playerId to 2
+            };
+            socket.emit("accept invite", { inviter, inviteData });
         }
     };
 

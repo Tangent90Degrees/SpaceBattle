@@ -219,9 +219,9 @@ const OnlineUsersPanel = (function () {
     // Handle accept button click
     $(document).on("click", "#accept-invite", function () {
         const inviter = $(this).data("inviter");
-        Socket.acceptInvite(inviter);
+        Socket.acceptInvite(inviter, Authentication.getUser());
         $("#invite-overlay").hide();
-        startCountdown(2);
+        startCountdown(2, inviter.username, Authentication.getUser().username); // Start countdown for player 2
     });
 
     // Handle decline button click
@@ -249,7 +249,7 @@ const OnlineUsersPanel = (function () {
     }
 
     // This function starts the countdown before the game
-    const startCountdown = function (playerId) {
+    const startCountdown = function (playerId, player1Username, player2Username) {
         Socket.removeUser(Authentication.getUser());
         
         let countdown = 5;
@@ -283,7 +283,7 @@ const OnlineUsersPanel = (function () {
                 $("#game-lives").show(); // Ensure game lives are shown
                 $("#returnButton").show();
 
-                game.start(playerId)
+                game.start(playerId, player1Username, player2Username); // Start the game
             }
         }, 1000);
     };

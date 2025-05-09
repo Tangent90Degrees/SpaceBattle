@@ -2,8 +2,9 @@ const Ranking = (function() {
     const show = function(data) {
         // Fetch the rankings from the server
         fetch("/ranking", {
-            method: "GET",
+            method: "POST",
             headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ p1Score: data.p1Score, p2Score: data.p2Score, p1Username: data.p1Username, p2Username: data.p2Username })
         })
         .then((res) => res.json())
         .then((json) => {
