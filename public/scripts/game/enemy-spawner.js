@@ -1,12 +1,12 @@
 class EnemySpawner extends GameObject {
-    constructor(sprite, players, enemyBullets, playerId) {
+    constructor(sprite, players, enemyBullets, id) {
         super()
         this._pool = new ObjectPool(function (pos) {
             let enemy = new Alien(sprite, pos, 0.5, players)
             enemy.bulletPool = enemyBullets
             return enemy
         })
-
+        this.id = id
         this.countDown = 3
     }
 
@@ -16,7 +16,10 @@ class EnemySpawner extends GameObject {
 
         if (this.countDown < 0) {
             this.countDown = 2 + 2 * Math.random()
-            this.spawn({ x: 20 + Math.random() * 260, y: -20 })
+            if (this.id === 1)
+                this.p1spawn({ x: 20 + Math.random() * 260, y: -20 })
+            else
+                this.p2spawn({ x: 20 + Math.random() * 260, y: -20 })
         }
     }
 
@@ -28,8 +31,13 @@ class EnemySpawner extends GameObject {
         this._pool.render(time)
     }
 
-    spawn(pos) {
-        Socket.spawnEnemy(pos, playerId)
+    p1spawn(pos) {
+        Socket.spawnEnemy(pos, this.id)
+        return this._pool.get(pos)
+    }
+
+    p2spawn(pos) {
+        Socket.spawnEnemy(pos, this.id)
         return this._pool.get(pos)
     }
 }

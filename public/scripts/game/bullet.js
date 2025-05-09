@@ -26,7 +26,7 @@ class Bullet extends GameObject {
                     enemy.health -= 1
 
                     // Update player score
-                    if (id === 1) {
+                    if (this.id === 1) {
                         game._player1.score += 10
                         if (enemy.health <= 0) {
                             game._player1.score += 50
@@ -36,7 +36,7 @@ class Bullet extends GameObject {
                             $("#p1Score").css("color", "white")
                         }, 1000)
                     }
-                    else if (id === 2) {
+                    else if (this.id === 2) {
                         game._player2.score += 10
                         if (enemy.health <= 0) {
                             game._player2.score += 50

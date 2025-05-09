@@ -94,9 +94,9 @@ const Socket = (function() {
         socket.on("show spawn enemy", (spawnData) => {
             spawnData = JSON.parse(spawnData);
             if (spawnData.id === 1 && game.playerId === 2) {
-                game._enemies.spawn(spawnData.pos);
+                game._enemies.p2spawn(spawnData.pos);
             } else if (spawnData.id === 2 && game.playerId === 1) {
-                game._enemies.spawn(spawnData.pos);
+                game._enemies.p1spawn(spawnData.pos);
             }
         });
     };

@@ -29,7 +29,7 @@ class Game {
 
         let enemySprite = new Sprite(this._context, 'resources/enemies/scout.png')
         let enemies = this._enemies
-            = new EnemySpawner(enemySprite, [this._player1, this._player2], this._enemyBullets, playerId)
+            = new EnemySpawner(enemySprite, [this._player1, this._player2], this._enemyBullets, this.playerId)
 
         let playerBulletSprite = new Sprite(this._context, 'resources/player/bullet.png')
         this._playerBullets = new ObjectPool(function (pos) {
@@ -37,10 +37,10 @@ class Game {
         })
 
         this._player1.bulletPool = new ObjectPool(function (pos) {
-            return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, playerId)
+            return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, 1)
         })
         this._player2.bulletPool = new ObjectPool(function (pos) {
-            return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, playerId)
+            return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, 2)
         })
 
         let game = this
