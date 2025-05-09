@@ -22,6 +22,9 @@ class Game {
         this._player2 =
             new Player(player2Sprite, player1DeadSprite,{ x: this._canvas.width - 60, y: 120 }, 0.5)
 
+        this._player1.teammate = this._player2
+        this._player2.teammate = this._player1
+
         let enemyBulletSprite = new Sprite(this._context, 'resources/enemies/bullet.png')
         this._enemyBullets = new ObjectPool(function (pos) {
             let bullet =
@@ -171,6 +174,8 @@ class Game {
 
     endGame() {
         alert("Game Over!");
+        this._timer.stop()
+        this._countDown.stop()
         // this.stop(); // Stop the game logic
         const resultData = {
             p1Score: this._player1.score,
@@ -221,6 +226,10 @@ class Game {
         }
         else if (this.playerId === 2 && this._player2.health <= 0) {
             Socket.die(2)
+        }
+
+        if ((this._player1.health <= 0 && this._player2.health <= 0) || this._countDown.time <= 0) {
+            this.endGame()
         }
     }
 

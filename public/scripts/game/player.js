@@ -6,6 +6,7 @@ class Player extends GameObject {
     /**
      * Creates an instance of Player.
      * @param sprite The sprite of the player.
+     * @param deadSprite
      * @param pos The position of the player.
      * @param scale The scale of the player.
      */
@@ -24,16 +25,24 @@ class Player extends GameObject {
             'alive': sprite,
             'dead': deadSprite
         }
+
+        this.teammate = null
     }
 
     update(time, delta) {
-        this.pos.x += this.direction.x * this.speed * delta
-        this.pos.y += this.direction.y * this.speed * delta
+        if (this.health > 0) {
+            this.pos.x += this.direction.x * this.speed * delta
+            this.pos.y += this.direction.y * this.speed * delta
 
-        this.pos.x = Math.max(this.pos.x, 20)
-        this.pos.x = Math.min(this.pos.x, 280)
-        this.pos.y = Math.max(this.pos.y, 20)
-        this.pos.y = Math.min(this.pos.y, 130)
+            this.pos.x = Math.max(this.pos.x, 20)
+            this.pos.x = Math.min(this.pos.x, 280)
+            this.pos.y = Math.max(this.pos.y, 20)
+            this.pos.y = Math.min(this.pos.y, 130)
+
+            if (this.teammate && this.teammate.health <= 0 && Box.intersects(this.area, this.teammate.area)) {
+                this.teammate.health = 1
+            }
+        }
     }
 
     render(time) {
@@ -43,7 +52,9 @@ class Player extends GameObject {
     }
 
     shoot() {
-        return this.bulletPool.get({ ...this.pos })
+        if (this.health > 0) {
+            return this.bulletPool.get({ ...this.pos })
+        }
     }
 }
 

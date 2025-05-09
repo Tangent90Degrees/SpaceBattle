@@ -9,6 +9,10 @@ class Timer {
         this._interval = null
     }
 
+    get time() {
+        return this._frames / this._frameRate
+    }
+
     start(update) {
         let timer = this
         this._interval = setInterval(function () {
