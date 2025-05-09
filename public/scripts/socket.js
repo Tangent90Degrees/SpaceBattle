@@ -89,7 +89,16 @@ const Socket = (function() {
                 game._player2.shoot();
                 console.log("player2 shoot");
             }
-        })
+        });
+
+        socket.on("show spawn enemy", (spawnData) => {
+            spawnData = JSON.parse(spawnData);
+            if (spawnData.id === 1 && game.playerId === 2) {
+                game._enemies.spawn(spawnData.pos);
+            } else if (spawnData.id === 2 && game.playerId === 1) {
+                game._enemies.spawn(spawnData.pos);
+            }
+        });
     };
 
     // This function disconnects the socket from the server
@@ -145,6 +154,16 @@ const Socket = (function() {
         }
     }
 
+    const spawnEnemy = function(spawnPos, playerId) {
+        if (socket && socket.connected) {
+            const spawnData = {
+                pos: spawnPos,
+                id: playerId
+            }
+            socket.emit("spawn enemy", spawnData);
+        }
+    };
+
     return {
         getSocket,
         connect,
@@ -153,6 +172,7 @@ const Socket = (function() {
         acceptInvite,
         declineInvite,
         updatePlayerPosition,
-        updatePlayerShoot// Expose the function here
+        updatePlayerShoot,
+        spawnEnemy// Expose the function here
     };
 })();
