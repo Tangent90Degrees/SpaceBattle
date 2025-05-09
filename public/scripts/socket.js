@@ -78,7 +78,7 @@ const Socket = (function() {
             }
         });
 
-        sokect.on("show player shoot", (playerData) => {
+        socket.on("show player shoot", (playerData) => {
             playerData = JSON.parse(playerData);
             if (playerData.id === 1 && game.playerId === 2) {
                 game._player1.pos = playerData.playerPosition;
