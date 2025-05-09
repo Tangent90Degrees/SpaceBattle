@@ -20,14 +20,14 @@ class Game {
         let enemyBulletSprite = new Sprite(this._context, 'resources/enemies/bullet.png')
         this._enemyBullets = new ObjectPool(function (pos) {
             let bullet =
-                new Bullet(enemyBulletSprite, pos, 0.5, { x: 0, y: 1 }, [game._player1])
+                new Bullet(enemyBulletSprite, pos, 0.5, { x: 0, y: 1 }, [game._player1, game._player2])
             bullet.speed = 60
             return bullet
         })
 
         let enemySprite = new Sprite(this._context, 'resources/enemies/scout.png')
         let enemies = this._enemies
-            = new EnemySpawner(enemySprite, [this._player1], this._enemyBullets)
+            = new EnemySpawner(enemySprite, [this._player1, this._player2], this._enemyBullets)
 
         let playerBulletSprite = new Sprite(this._context, 'resources/player/bullet.png')
         this._playerBullets = new ObjectPool(function (pos) {
