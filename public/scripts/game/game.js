@@ -14,10 +14,13 @@ class Game {
         this.totalScore = 0;
 
         let player1Sprite = new Sprite(this._context, 'resources/player/player1.png')
-        this._player1 = new Player(player1Sprite, { x: 60, y: 120 }, 0.5)
+        let player1DeadSprite = new Sprite(this._context, 'resources/player/ghost.png')
+        this._player1 =
+            new Player(player1Sprite, player1DeadSprite, { x: 60, y: 120 }, 0.5)
 
         let player2Sprite = new Sprite(this._context, 'resources/player/player1.png')
-        this._player2 = new Player(player2Sprite, { x: this._canvas.width - 60, y: 120 }, 0.5)
+        this._player2 =
+            new Player(player2Sprite, player1DeadSprite,{ x: this._canvas.width - 60, y: 120 }, 0.5)
 
         let enemyBulletSprite = new Sprite(this._context, 'resources/enemies/bullet.png')
         this._enemyBullets = new ObjectPool(function (pos) {

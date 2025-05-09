@@ -9,7 +9,7 @@ class Player extends GameObject {
      * @param pos The position of the player.
      * @param scale The scale of the player.
      */
-    constructor(sprite, pos = { x: 0, y: 0 }, scale = 1) {
+    constructor(sprite, deadSprite, pos = { x: 0, y: 0 }, scale = 1) {
         super(true, sprite, pos, scale)
         this.collider = new Box(-10, 10, -10, 10)
 
@@ -19,6 +19,11 @@ class Player extends GameObject {
         this.health = 6
         this.score = 0
         this.bulletPool = null
+
+        this._sprites = {
+            'alive': sprite,
+            'dead': deadSprite
+        }
     }
 
     update(time, delta) {
@@ -29,6 +34,12 @@ class Player extends GameObject {
         this.pos.x = Math.min(this.pos.x, 280)
         this.pos.y = Math.max(this.pos.y, 20)
         this.pos.y = Math.min(this.pos.y, 130)
+    }
+
+    render(time) {
+        let state = this.health > 0 ? 'alive' : 'dead'
+        this.sprite = this._sprites[state]
+        super.render(time);
     }
 
     shoot() {
