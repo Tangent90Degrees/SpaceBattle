@@ -36,6 +36,11 @@ class Game {
             return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, 0)
         })
 
+        let powerUpSprite = new Sprite(this._context, 'resources/heal.png')
+        this._powerup = new ObjectPool(function (pos) {
+            return new PowerUp(powerUpSprite, pos, 0.5,[this._player1, this._player2])
+        })
+
         this._player1.bulletPool = new ObjectPool(function (pos) {
             return new Bullet(playerBulletSprite, pos, 0.5, { x: 0, y: -1 }, enemies, 1)
         })
@@ -171,6 +176,7 @@ class Game {
         this._playerBullets.update(time, delta)
         this._enemyBullets.update(time, delta)
         this._enemies.update(time, delta)
+        this._powerup.update(time, delta)
         if (this.playerId === 1) this.updateLivesDisplay(this._player1.health)
         if (this.playerId === 2) this.updateLivesDisplay(this._player2.health)
         if (this.playerId === 1) this._enemies.hostUpdate(time, delta)
@@ -192,6 +198,7 @@ class Game {
         this._enemyBullets.render(time)
         this._playerBullets.render(time)
         this._enemies.render(time)
+        this._powerup.render(time)
         this._player1.render(time)
         this._player2.render(time)
     }

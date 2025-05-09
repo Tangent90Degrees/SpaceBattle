@@ -1,13 +1,41 @@
 class PowerUp extends GameObject {
-    constructor(sprite, pos = { x: 0, y: 0 }, scale = 1) {
-        super(true, sprite, pos, scale);
-        this.type = null; // Type of power-up (e.g., speed, health)
-        this.duration = 5; // Duration of the power-up effect
-        this.active = false; // Whether the power-up is currently active
-        this.age = 0; // Age of the power-up
+    constructor(sprite, pos = { x: 50, y: 50 }, scale = 1, players = []) {
+        super(false, sprite, pos, scale)
+        this.collider = new Box(-11, 11, -8, 9)
+
+        this.pool = null
+        this.health = 1
+        this.bulletPool = null
+        this.players = players
+        this.speed = 30
+        this.age = 300
     }
 
-    update(time) {
-        this.sprite.update(time, this.pos, this.scale);
+    update(time, delta) {
+        this.age -= this.speed * delta
+
+        if (this.age <= 0 && this.pool) {
+            this.health = 1
+            this.age = 300
+            this.pool.release(this)
+            return
+        }
+
+        if (this.health <= 0 && this.pool) {
+            this.health = 1
+            this.age = 300
+            this.pool.release(this)
+            return
+        }
+
+        this.players.forEach(player => {
+            if (this.area && player.area && Box.intersects(this.area, player.area)) {
+                player.health += 1
+                this.health = 1
+                this.age = 300
+                this.pool.release(this)
+                return true
+            }
+        })
     }
 }
